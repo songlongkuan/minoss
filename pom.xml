@@ -33,10 +33,10 @@
     </properties>
 
     <modules>
-        <module>minoss-start</module>
-        <module>minoss-common</module>
-        <module>minoss-cache-impl</module>
-        <module>minoss-controller</module>
+        <module>start/minoss-start</module>
+        <module>core/minoss-common</module>
+        <module>other/minoss-cache-impl</module>
+        <module>controller/minoss-controller</module>
     </modules>
 
     <dependencyManagement>

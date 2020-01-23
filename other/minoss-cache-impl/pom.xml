@@ -6,6 +6,7 @@
         <groupId>io.javac</groupId>
         <artifactId>minoss</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../</relativePath>
     </parent>
     <groupId>io.javac.minoss</groupId>
     <artifactId>minoss-cache-impl</artifactId>
