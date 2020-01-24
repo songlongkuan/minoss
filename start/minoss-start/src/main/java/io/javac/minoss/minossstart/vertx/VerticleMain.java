@@ -4,6 +4,7 @@ import io.javac.minoss.minosscommon.annotation.RequestBlockingHandler;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.config.MinOssProperties;
 import io.javac.minoss.minosscommon.enums.RequestMethod;
+import io.javac.minoss.minosscommon.handler.GlobalExceptionHandler;
 import io.javac.minoss.minosscommon.plugin.JwtPlugin;
 import io.javac.minoss.minossstart.MinossStartApplication;
 import io.vertx.core.AbstractVerticle;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,14 +46,14 @@ public class VerticleMain extends AbstractVerticle {
     @Autowired
     private MinOssProperties minOssProperties;
     @Autowired
-    private JwtPlugin jwtPlugin;
-    @Autowired
     private ResourceLoader resourceLoader;
+    @Autowired
+    private GlobalExceptionHandler globalExceptionHandler;
 
     /**
      * Controller 的包路径
      */
-    private final String controllerBasePackage = "io.javac.minoss.minosscontroller";
+    private final String controllerBasePackage[] = {"io.javac.minoss.minossappadmin.controller", "io.javac.minoss.minossappclient.controller"};
 
 
     @Override
@@ -65,13 +67,14 @@ public class VerticleMain extends AbstractVerticle {
         HttpServer server = vertx.createHttpServer();
 
         //开始注册路由
-        registerController(router);
+        for (String packagePath : controllerBasePackage) {
+            registerController(router, packagePath);
+        }
+
         //设置静态资源
         router.route("/*").handler(StaticHandler.create());
-
-        router.route().failureHandler(failhandler -> {
-            failhandler.response().end("fail");
-        });
+        //处理异常
+        router.route().failureHandler(globalExceptionHandler);
         //启动监听
         server.requestHandler(router).listen(minOssProperties.getPort(), handler -> {
             log.info("vertx run prot : [{}] run state : [{}]", minOssProperties.getPort(), handler.succeeded());
@@ -85,11 +88,9 @@ public class VerticleMain extends AbstractVerticle {
      *
      * @return
      */
-    public Resource[] controllerResource() {
+    public Resource[] controllerResource(String packagePath) {
         ResourcePatternResolver resolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
-        MetadataReaderFactory metaReader = new CachingMetadataReaderFactory(resourceLoader);
-
-        String controllerBasePackagePath = controllerBasePackage.replace(".", "/");
+        String controllerBasePackagePath = packagePath.replace(".", "/");
         try {
             return resolver.getResources(String.format("classpath*:%s/**/*.class", controllerBasePackagePath));
         } catch (IOException e) {
@@ -102,17 +103,17 @@ public class VerticleMain extends AbstractVerticle {
     /**
      * 注册Controller
      */
-    public void registerController(@NotNull Router router) {
+    public void registerController(@NotNull Router router, String packagePath) {
         if (MinossStartApplication.getContext() == null) {
             log.warn("SpringBoot application context is null register controller is fail");
             return;
         }
 
         try {
-            Resource[] resources = controllerResource();
+            Resource[] resources = controllerResource(packagePath);
             for (Resource resource : resources) {
                 String absolutePath = resource.getFile().getAbsolutePath().replace("/", ".");
-                absolutePath = absolutePath.substring(absolutePath.indexOf(controllerBasePackage));
+                absolutePath = absolutePath.substring(absolutePath.indexOf(packagePath));
                 absolutePath = absolutePath.replace(".class", "");
                 if (StringUtils.isEmpty(absolutePath)) continue;
                 //获取Class对象
@@ -148,7 +149,17 @@ public class VerticleMain extends AbstractVerticle {
                 .forEach(method -> {
                     try {
                         RequestMapping methodRequestMapping = method.getAnnotation(RequestMapping.class);
-                        String url = classRequestMapping.value()[0] + methodRequestMapping.value()[0];
+                        String superPath = classRequestMapping.value()[0];
+                        String methodPath = methodRequestMapping.value()[0];
+                        //路由存在为空的情况 则跳过
+                        if (StringUtils.isEmpty(superPath) || StringUtils.isEmpty(methodPath)) return;
+                        if (!superPath.endsWith("/")) {
+                            superPath += "/";
+                        }
+                        if (methodPath.startsWith("/")) {
+                            methodPath = methodPath.substring(1);
+                        }
+                        String url = superPath + methodPath;
                         //路由
                         Route route;
                         switch (methodRequestMapping.method()) {

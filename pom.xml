@@ -43,7 +43,6 @@
 
         <module>start/minoss-start</module>
         <module>bridge/minoss-bridge</module>
-        <module>controller/minoss-controller</module>
     </modules>
 
     <dependencyManagement>
