@@ -30,11 +30,15 @@
         <vertx.version>3.8.4</vertx.version>
         <jwt.version>0.9.1</jwt.version>
         <leveldb.version>0.12</leveldb.version>
+        <mybatisplus.version>3.2.0</mybatisplus.version>
+        <mybatisplus-generator.version>3.3.1</mybatisplus-generator.version>
     </properties>
 
     <modules>
-        <module>start/minoss-start</module>
         <module>core/minoss-common</module>
+        <module>core/minoss-dao</module>
+
+        <module>start/minoss-start</module>
         <module>bridge/minoss-bridge</module>
         <module>controller/minoss-controller</module>
     </modules>
@@ -45,6 +49,11 @@
             <dependency>
                 <groupId>io.javac.minoss</groupId>
                 <artifactId>minoss-common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.javac.minoss</groupId>
+                <artifactId>minoss-dao</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -74,7 +83,16 @@
                 <artifactId>jjwt</artifactId>
                 <version>${jwt.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatisplus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatisplus-generator.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -136,8 +154,6 @@
         </dependency>
 
     </dependencies>
-
-
 
 
 </project>
