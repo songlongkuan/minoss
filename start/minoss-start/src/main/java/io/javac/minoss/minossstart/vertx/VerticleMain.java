@@ -1,5 +1,6 @@
 package io.javac.minoss.minossstart.vertx;
 
+import io.javac.minoss.minosscommon.annotation.RequestBlockingHandler;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.config.MinOssProperties;
 import io.javac.minoss.minosscommon.enums.RequestMethod;
@@ -23,14 +24,19 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * Create by Pencilso on 2020/1/23 10:12 上午
  */
+@Validated
 @Slf4j
 @Component
 public class VerticleMain extends AbstractVerticle {
@@ -94,9 +100,9 @@ public class VerticleMain extends AbstractVerticle {
 
 
     /**
-     * 注册
+     * 注册Controller
      */
-    public void registerController(Router router) {
+    public void registerController(@NotNull Router router) {
         try {
             Resource[] resources = controllerResource();
             for (Resource resource : resources) {
@@ -109,59 +115,68 @@ public class VerticleMain extends AbstractVerticle {
                 //获取Controller的实例
                 Object controller = MinossStartApplication.getContext().getBean(controllerClass);
 
-                RequestMapping classAnnotation = controllerClass.getAnnotation(RequestMapping.class);
+                RequestMapping classRequestMapping = controllerClass.getAnnotation(RequestMapping.class);
                 //如果类 没有路径注解 则跳过
-                if (classAnnotation == null) continue;
+                if (classRequestMapping == null) continue;
                 //注册控制器里的方法
-                registerControllerMethod(router, classAnnotation, controllerClass, controller);
+                registerControllerMethod(router, classRequestMapping, controllerClass, controller);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+            log.error("registerController fail ", ex);
         }
     }
 
-    public void registerControllerMethod(Router router, RequestMapping classAnnotation, Class<?> controllerClass, Object controller) {
+    /**
+     * 注册Controller的每个方法
+     *
+     * @param router              路由对象
+     * @param classRequestMapping 类的api路径注解
+     * @param controllerClass     类class
+     * @param controller          Controller实例
+     */
+    public void registerControllerMethod(@NotNull Router router, @NotNull RequestMapping classRequestMapping, @NotNull Class<?> controllerClass, @NotNull Object controller) {
         //获取控制器里的方法
         Method[] controllerClassMethods = controllerClass.getMethods();
-        for (Method controllerClassMethod : controllerClassMethods) {
-            RequestMapping methodAnnotation = controllerClassMethod.getAnnotation(RequestMapping.class);
-            //方法上没有注解的话 跳过执行
-            if (methodAnnotation == null) continue;
-            try {
-                Handler<RoutingContext> methodHandler = (Handler<RoutingContext>) controllerClassMethod.invoke(controller);
-                String url = classAnnotation.value()[0] + methodAnnotation.value()[0];
-                RequestMethod method = methodAnnotation.method();
+        Arrays.asList(controllerClassMethods).stream()
+                .filter(method -> method.getAnnotation(RequestMapping.class) != null)
+                .forEach(method -> {
+                    try {
+                        RequestMapping methodRequestMapping = method.getAnnotation(RequestMapping.class);
+                        String url = classRequestMapping.value()[0] + methodRequestMapping.value()[0];
+                        //路由
+                        Route route;
+                        switch (methodRequestMapping.method()) {
+                            case POST:
+                                route = router.post(url);
+                                break;
+                            case PUT:
+                                route = router.put(url);
+                                break;
+                            case DELETE:
+                                route = router.delete(url);
+                                break;
+                            case ROUTE:
+                                route = router.route(url);
+                                break;
+                            case GET: // fall through
+                            default:
+                                route = router.get(url);
+                                break;
+                        }
+                        //调用Controller里的方法 获取返回值 Handler
+                        Handler<RoutingContext> methodHandler = (Handler<RoutingContext>) method.invoke(controller);
+                        RequestBlockingHandler requestBlockingHandler = Optional.ofNullable(method.getAnnotation(RequestBlockingHandler.class)).orElseGet(() -> controllerClass.getAnnotation(RequestBlockingHandler.class));
+                        if (requestBlockingHandler != null) {
+                            route.blockingHandler(methodHandler);
+                        } else {
+                            route.handler(methodHandler);
+                        }
+                        log.info("register controller -> [{}]  method -> [{}]  url -> [{}] ", controllerClass.getName(), method.getName(), url);
+                    } catch (Exception e) {
+                        log.error("registerControllerMethod fail controller: [{}]  method: [{}]", controllerClass, method.getName());
+                    }
+                });
 
-                log.info("register controller   class -> [{}]  method -> [{}]  url -> [{}]", controllerClass.getName(), controllerClassMethod.getName(), url);
-                //路由
-                Route route = null;
-                switch (method) {
-                    case POST:
-                        route = router.post(url);
-                        break;
-                    case PUT:
-                        route = router.put(url);
-                        break;
-                    case DELETE:
-                        route = router.delete(url);
-                        break;
-                    case ROUTE:
-                        route = router.route(url);
-                        break;
-                    case GET: // fall through
-                    default:
-                        route = router.get(url);
-                        break;
-                }
-
-                if (methodAnnotation.blockingHandler()) {
-                    route.blockingHandler(methodHandler);
-                } else {
-                    route.handler(methodHandler);
-                }
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

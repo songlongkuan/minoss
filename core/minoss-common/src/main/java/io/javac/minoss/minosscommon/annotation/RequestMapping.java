@@ -28,9 +28,4 @@ public @interface RequestMapping {
      */
     RequestMethod method() default RequestMethod.GET;
 
-    /**
-     * 是否同步执行
-     * @return
-     */
-    boolean blockingHandler() default false;
 }
