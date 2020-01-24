@@ -35,7 +35,7 @@
     <modules>
         <module>start/minoss-start</module>
         <module>core/minoss-common</module>
-        <module>other/minoss-cache-impl</module>
+        <module>bridge/minoss-bridge</module>
         <module>controller/minoss-controller</module>
     </modules>
 
@@ -54,7 +54,7 @@
             </dependency>
             <dependency>
                 <groupId>io.javac.minoss</groupId>
-                <artifactId>minoss-cache-impl</artifactId>
+                <artifactId>minoss-bridge</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
