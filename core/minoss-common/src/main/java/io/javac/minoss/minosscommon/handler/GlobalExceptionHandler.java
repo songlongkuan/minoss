@@ -1,6 +1,7 @@
 package io.javac.minoss.minosscommon.handler;
 
 import io.javac.minoss.minosscommon.constant.ResponeWrapperConst;
+import io.javac.minoss.minosscommon.exception.MinOssException;
 import io.javac.minoss.minosscommon.model.respone.ResponeWrapper;
 import io.javac.minoss.minosscommon.utils.VertxRespone;
 import io.vertx.core.Handler;
@@ -23,8 +24,14 @@ public class GlobalExceptionHandler implements Handler<RoutingContext> {
     public void handle(RoutingContext event) {
         ResponeWrapper<String> responeWrapper = new ResponeWrapper<>();
         Throwable failure = event.failure();
+        //参数校验失败
         if (failure instanceof ConstraintViolationException) {
             responeWrapper.setCode(ResponeWrapperConst.VALIDATION_PARAM_FAIL)
+                    .setMessage(failure.getMessage());
+        }
+        //自定义异常
+        if (failure instanceof MinOssException) {
+            responeWrapper.setCode(ResponeWrapperConst.OPERATE_FAIL)
                     .setMessage(failure.getMessage());
         }
         if (responeWrapper.getMessage() == null) {

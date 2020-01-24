@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @date 2020/1/24 2:55 下午
  */
 @Component
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admin/user")
 public class VertxUserController {
     @Autowired
     private VertxUserService vertxUserService;

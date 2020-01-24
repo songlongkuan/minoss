@@ -44,15 +44,14 @@ public class VertxUserServiceImpl implements VertxUserService {
         if (!matches) {
             throw new MinOssException("账户或者密码错误，请尝试稍后重试！");
         }
-        //login success
-        userModel.setJwtSalt(IdGeneratorCore.generatorUUID());
-        Optional<String> generateToken = jwtPlugin.generateToken(userModel.getMid(), userModel.getJwtSalt());
-        generateToken.orElseThrow(() -> new MinOssException("生成token令牌出错，请尝试稍后重试！"));
-
-        userModel.setJwtToken(generateToken.get());
+        //generator new salt
+        String jwtSalt = IdGeneratorCore.generatorUUID();
+        //generator new accesstoken
+        Optional<String> generateToken = jwtPlugin.generateToken(userModel.getMid(), jwtSalt);
+        String accesstoken = generateToken.orElseThrow(() -> new MinOssException("生成token令牌出错，请尝试稍后重试！"));
         //更新用户token 和 hash salt
         userService.updateModelByMid(
-                userModel,
+                new UserModel().setJwtSalt(jwtSalt).setJwtToken(accesstoken).setVersion(userModel.getVersion()),
                 userModel.getMid());
         VertxRespone.responeSuccess(routingContext, StringV.by("accesstoken", userModel.getJwtToken()));
 
