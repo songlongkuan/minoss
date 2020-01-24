@@ -103,6 +103,11 @@ public class VerticleMain extends AbstractVerticle {
      * 注册Controller
      */
     public void registerController(@NotNull Router router) {
+        if (MinossStartApplication.getContext() == null) {
+            log.warn("SpringBoot application context is null register controller is fail");
+            return;
+        }
+
         try {
             Resource[] resources = controllerResource();
             for (Resource resource : resources) {

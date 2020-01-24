@@ -1,10 +1,19 @@
 package io.javac.minoss.minosscontroller.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.enums.RequestMethod;
+import io.javac.minoss.minosscommon.utils.JsonUtils;
+import io.javac.minoss.minossdao.model.UserModel;
+import io.javac.minoss.minossdao.service.UserService;
 import io.vertx.core.Handler;
+import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author pencilso
@@ -13,7 +22,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequestMapping("/api/test")
 public class ClientTestController {
-
+    @Autowired
+    private UserService userService;
 
     /**
      * 演示服务调用
@@ -23,8 +33,15 @@ public class ClientTestController {
     @RequestMapping(value = "/listUsers", method = RequestMethod.GET)
     public Handler<RoutingContext> listUsers() {
         return ctx -> {
-            System.out.println("runing... listUsers");
-            ctx.response().end("success...");
+            List<UserModel> userModelList = userService.list();
+            try {
+                HttpServerResponse response = ctx.response();
+                response.putHeader("Content-Type", "text/json;charset=utf-8");
+                @NotNull String objectToJson = JsonUtils.objectToJson(userModelList);
+                response.end(objectToJson);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         };
     }
 }

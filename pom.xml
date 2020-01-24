@@ -17,9 +17,8 @@
 
     <repositories>
         <repository>
-            <id>alimaven</id>
-            <name>aliyun maven</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <id>aliyun</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
         </repository>
     </repositories>
 
@@ -30,8 +29,9 @@
         <vertx.version>3.8.4</vertx.version>
         <jwt.version>0.9.1</jwt.version>
         <leveldb.version>0.12</leveldb.version>
-        <mybatisplus.version>3.2.0</mybatisplus.version>
+        <mybatisplus.version>3.3.1</mybatisplus.version>
         <mybatisplus-generator.version>3.3.1</mybatisplus-generator.version>
+        <p6spy.version>3.8.7</p6spy.version>
     </properties>
 
     <modules>
@@ -93,6 +93,7 @@
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatisplus-generator.version}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 

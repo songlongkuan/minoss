@@ -1,2 +1,12 @@
 jwt:
   secret: 28bca96d37984b54839296dd9410748f
+
+spring:
+  datasource:
+    #数据库url
+    url: jdbc:mysql://10.211.55.6:3306/minoss?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=CTT
+    #数据库用户名
+    username: root
+    #数据库用户密码
+    password: 1237654321
+    driver-class-name: com.mysql.cj.jdbc.Driver

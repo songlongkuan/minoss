@@ -47,7 +47,8 @@ public class MybatisPlusCodeGenerator {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
 //        String projectPath = System.getProperty("public_api.dir");
-        gc.setOutputDir("src/main/java");
+//        gc.setOutputDir("src/main/java");
+        gc.setOutputDir("core/minoss-dao/src/main/java");
         gc.setAuthor("pencilso");
         gc.setOpen(false);
 
@@ -60,20 +61,20 @@ public class MybatisPlusCodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://192.168.1.100:3306/inlan_yuansu?useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://10.211.55.6:3306/minoss?useUnicode=true&useSSL=false&characterEncoding=utf8");
 //         dsc.setSchemaName("inlan_");
-        dsc.setDriverName("com.mysql.jdbc.Driver");
-        dsc.setUsername("inlan");
-        dsc.setPassword("Inlan1234!@#$");
+        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
+        dsc.setUsername("root");
+        dsc.setPassword("1237654321");
         mpg.setDataSource(dsc);
 
         // 包配置
         PackageConfig pc = new PackageConfig();
 //        pc.setModuleName(scanner("模块名"));
-        pc.setModuleName("db");
+//        pc.setModuleName("");
         pc.setEntity("model");
-        pc.setServiceImpl("service.imp");
-        pc.setParent("com.inlan.yuansu");
+        pc.setServiceImpl("service.impl");
+        pc.setParent("io.javac.minoss.minossdao");
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -134,14 +135,14 @@ public class MybatisPlusCodeGenerator {
         strategy.setSuperControllerClass("com.baomidou.ant.common.BaseController");
         strategy.setSuperServiceClass(BaseIService.class.getName());
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
-        strategy.setSuperEntityColumns("id", "mid", "status", "version", "create_date", "update_date");
+        strategy.setSuperEntityColumns("id", "mid", "if_del", "version", "create_date", "update_date");
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setTablePrefix("inlan_");
+        strategy.setTablePrefix("minoss");
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
 
-        File file = new File(gc.getOutputDir() + "/com/inlan/yuansu/db/controller");
+        File file = new File(gc.getOutputDir() + "/io/javac/minoss/minossdao/controller");
         deleteDir(file);
     }
 

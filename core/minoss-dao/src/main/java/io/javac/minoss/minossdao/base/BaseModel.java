@@ -31,10 +31,10 @@ public class BaseModel {
     private Integer version;
 
     /**
-     * 数据状态 逻辑删除
+     * 是否删除  0未删除  1已删除
      */
     @TableLogic
-    private Boolean status;
+    private Boolean ifDel;
 
     /**
      * 创建时间
