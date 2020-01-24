@@ -1,4 +1,4 @@
-package io.javac.minoss.minosscontroller.client;
+package io.javac.minoss.minossappclient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;

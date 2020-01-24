@@ -38,6 +38,9 @@
         <module>core/minoss-common</module>
         <module>core/minoss-dao</module>
 
+        <module>app/minoss-app-client</module>
+        <module>app/minoss-app-admin</module>
+
         <module>start/minoss-start</module>
         <module>bridge/minoss-bridge</module>
         <module>controller/minoss-controller</module>
@@ -68,9 +71,15 @@
             </dependency>
             <dependency>
                 <groupId>io.javac.minoss</groupId>
-                <artifactId>minoss-controller</artifactId>
+                <artifactId>minoss-app-admin</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>io.javac.minoss</groupId>
+                <artifactId>minoss-app-client</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+
             <!--            其他依赖 统一管理版本-->
 
             <dependency>

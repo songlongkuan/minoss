@@ -35,9 +35,12 @@
         </dependency>
         <dependency>
             <groupId>io.javac.minoss</groupId>
-            <artifactId>minoss-controller</artifactId>
+            <artifactId>minoss-app-client</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>io.javac.minoss</groupId>
+            <artifactId>minoss-app-admin</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
