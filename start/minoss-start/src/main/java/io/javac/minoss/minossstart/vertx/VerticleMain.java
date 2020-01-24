@@ -12,6 +12,7 @@ import io.vertx.ext.web.Route;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.StaticHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -57,7 +58,10 @@ public class VerticleMain extends AbstractVerticle {
         //创建http服务
         HttpServer server = vertx.createHttpServer();
 
+        //开始注册路由
         registerController(router);
+        //设置静态资源
+        router.route("/*").handler(StaticHandler.create());
 
         router.route().failureHandler(failhandler -> {
             failhandler.response().end("fail");
