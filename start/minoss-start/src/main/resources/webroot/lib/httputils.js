@@ -7,17 +7,18 @@ function request(api, requestType, params, success) {
         type: requestType,
         url: baseApiPath + api,
         data: params,
-        timeout:5000,
+        timeout: 5000,
         xhrFields: {
             withCredentials: true
         },
         success: function (result) {
             layer.closeAll('loading');
-            if (result.code == 0)
+            if (result.code == 0) {
                 success(result)
-            else if (result.code == 10003)
+            } else if (result.code == 10003) {
+                clearAllCookie()
                 window.location.href = "../login/index.html"
-            else {
+            } else {
                 layer.msg(result.message)
             }
         },
@@ -35,4 +36,14 @@ function request(api, requestType, params, success) {
     })
 
 }
+
+//清除所有的cookie
+function clearAllCookie() {
+    var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+    if (keys) {
+        for (var i = keys.length; i--;)
+            document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+    }
+}
+
 

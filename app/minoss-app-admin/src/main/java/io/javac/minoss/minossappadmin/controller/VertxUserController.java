@@ -22,6 +22,11 @@ public class VertxUserController {
     @Autowired
     private VertxUserService vertxUserService;
 
+    /**
+     * 用户登录
+     *
+     * @return
+     */
     @RequestInterceptClear
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public Handler<RoutingContext> login() {
@@ -33,6 +38,11 @@ public class VertxUserController {
         };
     }
 
+    /**
+     * 获取用户信息
+     *
+     * @return
+     */
     @RequestMapping(value = "userdetails", method = RequestMethod.GET)
     public Handler<RoutingContext> userDetails() {
         return ctx -> {
