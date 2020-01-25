@@ -1,5 +1,7 @@
 package io.javac.minoss.minossappadmin.service;
 
+import io.javac.minoss.minosscommon.vertx.VertxRequest;
+import io.javac.minoss.minossdao.model.UserModel;
 import io.vertx.ext.web.RoutingContext;
 
 import javax.validation.constraints.NotEmpty;
@@ -13,6 +15,20 @@ import javax.validation.constraints.NotNull;
  */
 public interface VertxUserService {
 
+    /**
+     * 用户登录
+     *
+     * @param vertxRequest 上下文对象
+     * @param loginName      登录账号
+     * @param loginPassword  登录密码
+     */
+    void userLogin(@NotNull VertxRequest vertxRequest, @NotEmpty String loginName, @NotEmpty String loginPassword);
 
-    void userLogin(@NotNull RoutingContext routingContext, @NotEmpty String loginName, @NotEmpty String loginPassword);
+    /**
+     * 获取用户模型
+     *
+     * @param uMid 用户id
+     * @return  用户模型
+     */
+    UserModel getByuMid(@NotNull Long uMid);
 }

@@ -19,7 +19,6 @@ public interface CacheStore<K, V> {
      * @param key
      * @return 返回缓存 value
      */
-    @NotNull
     Optional<V> get(@NotNull K key);
 
     /**

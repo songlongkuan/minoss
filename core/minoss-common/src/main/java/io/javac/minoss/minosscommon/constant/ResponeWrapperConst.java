@@ -17,4 +17,13 @@ public interface ResponeWrapperConst {
      * 参数校验失败
      */
     int VALIDATION_PARAM_FAIL = 10002;
+    /**
+     * 登录失效
+     */
+    int LOGIN_INVALID = 10003;
+
+    /**
+     * 服务器异常
+     */
+    int SERVER_ERROR = 20000;
 }

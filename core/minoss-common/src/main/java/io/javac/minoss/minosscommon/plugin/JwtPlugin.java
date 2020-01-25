@@ -83,7 +83,7 @@ public class JwtPlugin {
                     .setSalt((String) claims.get(CLATIN_KEY_USALT))
                     .setLoginTime((Long) claims.get(CLAIN_KEY_TIME));
         } catch (Exception ex) {
-            log.info("jwt getOauthEntity fail token: [{}]", token);
+            log.warn("jwt getOauthEntity fail token: [{}]", token,ex);
         }
         return Optional.ofNullable(jwtAuthEntity);
     }

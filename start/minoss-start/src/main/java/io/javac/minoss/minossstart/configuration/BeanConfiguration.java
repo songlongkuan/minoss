@@ -4,6 +4,8 @@ import io.javac.minoss.minossbridge.LevelCacheStore;
 import io.javac.minoss.minosscommon.bcrypt.BCryptPasswordEncoder;
 import io.javac.minoss.minosscommon.cache.StringCacheStore;
 import io.javac.minoss.minosscommon.config.MinOssProperties;
+import io.javac.minoss.minosscommon.handler.IntercepTokenChecktHandler;
+import io.javac.minoss.minosscommon.model.intercept.InterceptWrapper;
 import io.javac.minoss.minosscommon.plugin.JwtPlugin;
 import io.vertx.core.Vertx;
 import org.springframework.context.annotation.Bean;
@@ -58,5 +60,19 @@ public class BeanConfiguration {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * 配置拦截器
+     *
+     * @return
+     */
+    @Bean
+    public InterceptWrapper interceptWrapper() {
+        InterceptWrapper interceptWrapper = new InterceptWrapper();
+        interceptWrapper
+                .addIntercept(new InterceptWrapper.InterceptWrapperPojo().setApiPath("/api/admin/").setInterceptHandler(IntercepTokenChecktHandler.class))
+        ;
+        return interceptWrapper;
     }
 }

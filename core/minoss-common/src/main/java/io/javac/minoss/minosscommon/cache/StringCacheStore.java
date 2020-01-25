@@ -1,7 +1,7 @@
 package io.javac.minoss.minosscommon.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.javac.minoss.minosscommon.exception.MinOssException;
+import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -24,7 +24,7 @@ public abstract class StringCacheStore extends AbstractCacheStore<String, String
         try {
             put(key, JsonUtils.objectToJson(value));
         } catch (JsonProcessingException e) {
-            throw new MinOssException("Failed to convert " + value + " to json", e);
+            throw new MinOssMessageException("Failed to convert " + value + " to json", e);
         }
     }
 
@@ -32,7 +32,7 @@ public abstract class StringCacheStore extends AbstractCacheStore<String, String
         try {
             put(key, JsonUtils.objectToJson(value), timeout, timeUnit);
         } catch (JsonProcessingException e) {
-            throw new MinOssException("Failed to convert " + value + " to json", e);
+            throw new MinOssMessageException("Failed to convert " + value + " to json", e);
         }
     }
 

@@ -22,7 +22,7 @@ public abstract class AbstractCacheStore<K, V> implements CacheStore<K, V> {
      * @return 返回缓存数据
      */
     @NonNull
-    public abstract Optional<CacheWrapper<V>> getInternal(@NonNull K key);
+    public abstract Optional<CacheWrapper<V>> getInternal(@NotNull K key);
 
     /**
      * 放入一个wrapper缓存
@@ -30,11 +30,11 @@ public abstract class AbstractCacheStore<K, V> implements CacheStore<K, V> {
      * @param key          键值
      * @param cacheWrapper 缓存数据
      */
-    public abstract void putInternal(@NonNull K key, @NonNull CacheWrapper<V> cacheWrapper);
+    public abstract void putInternal(@NotNull K key, @NotNull CacheWrapper<V> cacheWrapper);
 
 
     @Override
-    public @NotNull Optional<V> get(@NotNull K key) {
+    public Optional<V> get(@NotNull K key) {
 
         return getInternal(key).map(cacheWrapper -> {
             // 检查是否过期

@@ -1,8 +1,9 @@
-package io.javac.minoss.minosscommon.utils;
+package io.javac.minoss.minosscommon.vertx;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javac.minoss.minosscommon.constant.ResponeWrapperConst;
 import io.javac.minoss.minosscommon.model.respone.ResponeWrapper;
+import io.javac.minoss.minosscommon.utils.JsonUtils;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +15,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class VertxRespone {
 
+    private final RoutingContext routingContext;
 
-    public static void respone(RoutingContext routingContext, ResponeWrapper responeWrapper) {
-        respone(routingContext.response(), responeWrapper);
+    private VertxRespone(RoutingContext routingContext) {
+        this.routingContext = routingContext;
     }
 
-    public static void respone(HttpServerResponse httpServerResponse, ResponeWrapper responeWrapper) {
+    public static VertxRespone build(RoutingContext routingContext) {
+        return new VertxRespone(routingContext);
+    }
+
+
+    public void respone(ResponeWrapper responeWrapper) {
+        HttpServerResponse httpServerResponse = routingContext.response();
         httpServerResponse.putHeader("Content-Type", "text/json;charset=utf-8");
         try {
             httpServerResponse.end(JsonUtils.objectToJson(responeWrapper));
@@ -29,11 +37,7 @@ public class VertxRespone {
         }
     }
 
-    public static void responeSuccess(RoutingContext routingContext, Object data) {
-        responeSuccess(routingContext.response(), data);
-    }
-
-    public static void responeSuccess(HttpServerResponse httpServerResponse, Object data) {
-        respone(httpServerResponse, new ResponeWrapper(ResponeWrapperConst.SUCCESS, data, "操作成功"));
+    public void responeSuccess(Object data) {
+        respone(new ResponeWrapper(ResponeWrapperConst.SUCCESS, data, "操作成功"));
     }
 }
