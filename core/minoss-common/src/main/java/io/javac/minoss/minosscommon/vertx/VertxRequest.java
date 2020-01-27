@@ -5,13 +5,12 @@ import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
 import io.javac.minoss.minosscommon.utils.JsonUtils;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpServerRequest;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.ValidationException;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 /**

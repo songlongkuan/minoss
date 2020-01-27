@@ -52,7 +52,7 @@ public class VerticleMain extends AbstractVerticle {
     private InterceptWrapper interceptWrapper;
 
     /**
-     * Controller 的包路径
+     * controller package 
      */
     private final String controllerBasePackage[] = {
             "io.javac.minoss.minossappadmin.controller",
@@ -63,23 +63,18 @@ public class VerticleMain extends AbstractVerticle {
     @Override
     public void start() throws Exception {
         super.start();
-        //创建路由对象
+        //create router
         Router router = Router.router(vertx);
-        //获取整个消息体 放进RoutingContext
-        router.route().handler(BodyHandler.create());
-        //创建http服务
         HttpServer server = vertx.createHttpServer();
-
-        //开始注册路由
+        //start register controller
         for (String packagePath : controllerBasePackage) {
             registerController(router, packagePath);
         }
-
-        //设置静态资源
+        //register static resources handler
         router.route("/*").handler(StaticHandler.create());
-        //处理异常
+        //register global exception handler
         router.route().failureHandler(globalExceptionHandler);
-        //启动监听
+        //start listen prot
         server.requestHandler(router).listen(minOssProperties.getPort(), handler -> {
             log.info("vertx run prot : [{}] run state : [{}]", minOssProperties.getPort(), handler.succeeded());
         });
@@ -88,11 +83,44 @@ public class VerticleMain extends AbstractVerticle {
 
 
     /**
-     * 扫描控制器的类
+     * register controller
+     */
+    private void registerController(@NotNull Router router, String packagePath) {
+        if (SpringBootContext.getContext() == null) {
+            log.warn("SpringBoot application context is null register controller is fail");
+            return;
+        }
+
+        try {
+            Resource[] resources = scannerControllerClass(packagePath);
+            for (Resource resource : resources) {
+                String absolutePath = resource.getFile().getAbsolutePath().replace("/", ".");
+                absolutePath = absolutePath.substring(absolutePath.indexOf(packagePath));
+                absolutePath = absolutePath.replace(".class", "");
+                if (StringUtils.isEmpty(absolutePath)) continue;
+                //get class
+                Class<?> controllerClass = Class.forName(absolutePath);
+                //from class get controller instance bean
+                Object controller = SpringBootContext.getContext().getBean(controllerClass);
+
+                RequestMapping classRequestMapping = controllerClass.getAnnotation(RequestMapping.class);
+                //if controller class not have requestMapping annotation -> skip register
+                if (classRequestMapping == null) continue;
+                //register controller method
+                registerControllerMethod(router, classRequestMapping, controllerClass, controller);
+            }
+        } catch (Exception ex) {
+            log.error("registerController fail ", ex);
+        }
+    }
+
+    /**
+     * scanner controller class array
      *
+     * @param packagePath controller package
      * @return
      */
-    public Resource[] controllerResource(String packagePath) {
+    public Resource[] scannerControllerClass(String packagePath) {
         ResourcePatternResolver resolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
         String controllerBasePackagePath = packagePath.replace(".", "/");
         try {
@@ -103,46 +131,13 @@ public class VerticleMain extends AbstractVerticle {
         return null;
     }
 
-
     /**
-     * 注册Controller
-     */
-    private void registerController(@NotNull Router router, String packagePath) {
-        if (SpringBootContext.getContext() == null) {
-            log.warn("SpringBoot application context is null register controller is fail");
-            return;
-        }
-
-        try {
-            Resource[] resources = controllerResource(packagePath);
-            for (Resource resource : resources) {
-                String absolutePath = resource.getFile().getAbsolutePath().replace("/", ".");
-                absolutePath = absolutePath.substring(absolutePath.indexOf(packagePath));
-                absolutePath = absolutePath.replace(".class", "");
-                if (StringUtils.isEmpty(absolutePath)) continue;
-                //获取Class对象
-                Class<?> controllerClass = Class.forName(absolutePath);
-                //获取Controller的实例
-                Object controller = SpringBootContext.getContext().getBean(controllerClass);
-
-                RequestMapping classRequestMapping = controllerClass.getAnnotation(RequestMapping.class);
-                //如果类 没有路径注解 则跳过
-                if (classRequestMapping == null) continue;
-                //注册控制器里的方法
-                registerControllerMethod(router, classRequestMapping, controllerClass, controller);
-            }
-        } catch (Exception ex) {
-            log.error("registerController fail ", ex);
-        }
-    }
-
-    /**
-     * 注册Controller的每个方法
+     * register controller method
      *
-     * @param router              路由对象
-     * @param classRequestMapping 类的api路径注解
-     * @param controllerClass     类class
-     * @param controller          Controller实例
+     * @param router              route
+     * @param classRequestMapping controller requestMapping annotation
+     * @param controllerClass     controller class
+     * @param controller          controller instance
      */
     private void registerControllerMethod(@NotNull Router router, @NotNull RequestMapping classRequestMapping, @NotNull Class<?> controllerClass, @NotNull Object controller) {
         //获取控制器里的方法
@@ -154,18 +149,19 @@ public class VerticleMain extends AbstractVerticle {
                         RequestMapping methodRequestMapping = method.getAnnotation(RequestMapping.class);
                         String superPath = classRequestMapping.value()[0];
                         String methodPath = methodRequestMapping.value()[0];
-                        //路由存在为空的情况 则跳过
+                        //if api path empty skip
                         if (StringUtils.isEmpty(superPath) || StringUtils.isEmpty(methodPath)) return;
                         String url = VerticleUtils.buildApiPath(superPath, methodPath);
-                        //构建route
+                        //build route
                         Route route = VerticleUtils.buildRouterUrl(url, router, methodRequestMapping.method());
-                        //调用Controller里的方法 获取返回值 Handler
+                        //run controller method get Handler object
                         Handler<RoutingContext> methodHandler = (Handler<RoutingContext>) method.invoke(controller);
-                        //开始注册拦截handler
+                        //add intercept
                         addIntercept(url, route, controllerClass, method);
-                        //开始注册Controller handler
+                        //register controller mthod Handler object
                         RequestBlockingHandler requestBlockingHandler = Optional.ofNullable(method.getAnnotation(RequestBlockingHandler.class)).orElseGet(() -> controllerClass.getAnnotation(RequestBlockingHandler.class));
                         if (requestBlockingHandler != null) {
+                            //register blocking handler
                             route.blockingHandler(methodHandler);
                         } else {
                             route.handler(methodHandler);
@@ -180,27 +176,34 @@ public class VerticleMain extends AbstractVerticle {
     }
 
     /**
-     * 添加拦截器
+     * add intercept handler
      *
-     * @param url             api的url路径
-     * @param route           路由
-     * @param controllerClass 控制器Controller的类
-     * @param method          Controller里的方法
+     * @param url             api path
+     * @param route           route
+     * @param controllerClass controller class
+     * @param method          controller method
      */
     public void addIntercept(@NotNull String url, @NotNull Route route, @NotNull Class<?> controllerClass, @NotNull Method method) {
-        //检测是否跳过添加拦截器
+        //register bodyAsJson handler
+        Optional.ofNullable(method.getAnnotation(RequestBody.class)).ifPresent(requestBody -> {
+            route.handler(BodyHandler.create());
+        });
+
+        //if skip add intercept handler
         RequestInterceptClear requestInterceptClear = Optional.ofNullable(method.getAnnotation(RequestInterceptClear.class))
                 .orElseGet(() -> controllerClass.getAnnotation(RequestInterceptClear.class));
         if (requestInterceptClear != null) {
-            //跳过添加拦截器
+            //skip
             return;
         }
         List<InterceptWrapper.InterceptWrapperPojo> pojoList = interceptWrapper.getPojoList();
         pojoList.forEach(it -> {
             try {
+                //matching api path
                 if (!url.startsWith(it.getApiPath())) {
                     return;
                 }
+                //register intercept handler
                 BaseInterceptHandler interceptHandler = SpringBootContext.getContext().getBean(it.getInterceptHandler());
                 route.handler(interceptHandler);
             } catch (Exception ex) {

@@ -15,14 +15,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequestMapping {
     /**
-     * 路径
+     * api path
      *
      * @return
      */
     String[] value() default {};
 
     /**
-     * 请求方法
+     * request method
      *
      * @return
      */

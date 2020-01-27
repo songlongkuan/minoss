@@ -1,6 +1,7 @@
 package io.javac.minoss.minossappadmin.controller;
 
 import io.javac.minoss.minossappadmin.service.VertxBucketService;
+import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.base.VertxControllerHandler;
 import io.javac.minoss.minosscommon.enums.RequestMethod;
@@ -57,6 +58,7 @@ public class VertxBucketController {
      *
      * @return
      */
+    @RequestBody
     @RequestMapping(value = "updatebucket", method = RequestMethod.POST)
     public VertxControllerHandler updateBucket() {
         return vertxRequest -> {

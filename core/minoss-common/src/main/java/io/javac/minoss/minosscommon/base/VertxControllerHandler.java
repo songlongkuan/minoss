@@ -5,7 +5,7 @@ import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 
 /**
- * Controller 返回的handle
+ * invok Controller method return handler
  *
  * @author pencilso
  * @date 2020/1/23 11:06 下午
@@ -17,5 +17,5 @@ public interface VertxControllerHandler extends Handler<RoutingContext> {
         handle(VertxRequest.build(event));
     }
 
-    void handle(VertxRequest vertxRequest) ;
+    void handle(VertxRequest vertxRequest);
 }

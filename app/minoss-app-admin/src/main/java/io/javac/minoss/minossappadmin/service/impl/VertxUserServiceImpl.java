@@ -40,7 +40,7 @@ public class VertxUserServiceImpl implements VertxUserService {
     @Override
     public void userLogin(@NotNull VertxRequest vertxRequest, @NotEmpty String loginName, @NotEmpty String loginPassword) {
         Optional<UserModel> optionalUserModel = userService.getByLoginName(loginName);
-        optionalUserModel.orElseThrow(() -> new MinOssMessageException("该用户不存在，请尝试注册或与管理员联系！"));
+        optionalUserModel.orElseThrow(() -> new MinOssMessageException("该用户不存在，请与管理员联系！"));
         UserModel userModel = optionalUserModel.get();
         //check login password
         boolean matches = bCryptPasswordEncoder.matches(loginPassword, userModel.getLoginPassword());

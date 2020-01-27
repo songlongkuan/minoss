@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class DateUtils {
 
     /**
-     * 获取当前时间
+     * get current time
      *
      * @return
      */
@@ -26,7 +26,7 @@ public class DateUtils {
     }
 
     /**
-     * 获取当前时间戳
+     * get current time stamp
      *
      * @return
      */
@@ -35,11 +35,11 @@ public class DateUtils {
     }
 
     /**
-     * 添加时间
+     * add time
      *
-     * @param date     当前时间
-     * @param time     要添加的时间
-     * @param timeUnit 时间单位
+     * @param date     current time
+     * @param time     need add time
+     * @param timeUnit time unit {day 、hours、minutes、seconds、milliseconds}
      * @return 返回添加后的时间
      */
     public static Long add(@NotNull Long date, long time, @NonNull TimeUnit timeUnit) {

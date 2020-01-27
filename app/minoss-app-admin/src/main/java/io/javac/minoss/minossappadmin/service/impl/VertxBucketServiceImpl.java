@@ -53,8 +53,8 @@ public class VertxBucketServiceImpl implements VertxBucketService {
         //组装要响应的数据
         List<BucketVO> responeBucketVO = new ArrayList<>(bucketModelList.size());
         bucketModelList.forEach(it -> {
-            BucketVO bucketVO = new BucketVO();
             Optional.ofNullable(bucketCollectModelMap.get(it.getMid())).ifPresent(bucketCollectModel -> {
+                BucketVO bucketVO = new BucketVO();
                 BeanUtils.copyProperties(bucketCollectModel, bucketVO);
                 BeanUtils.copyProperties(it, bucketVO);
                 responeBucketVO.add(bucketVO);
@@ -70,6 +70,10 @@ public class VertxBucketServiceImpl implements VertxBucketService {
         BeanUtils.copyProperties(paramInsertBucketBO, bucketModel);
         bucketModel.setMid(IdGeneratorCore.generatorId());
         boolean insertBucket = bucketService.save(bucketModel);
+        if (!insertBucket) {
+            log.warn("insert new bucket fail param: [{}]", paramInsertBucketBO);
+            throw new MinOssMessageException("新增Bucket出错，请尝试稍后重试！");
+        }
 
         //插入统计汇总 表
         BucketCollectModel bucketCollectModel = new BucketCollectModel();
@@ -78,9 +82,9 @@ public class VertxBucketServiceImpl implements VertxBucketService {
                 .setStoreUsedSize(0L)
                 .setMid(IdGeneratorCore.generatorId());
         boolean insertBucketCollect = bucketCollectService.save(bucketCollectModel);
-        if (!insertBucket || !insertBucketCollect) {
-            log.warn("insert new bucket fail param: [{}] insertBucket : [{}] insertBucketCollect : [{}]", paramInsertBucketBO, insertBucket, insertBucketCollect);
-            throw new MinOssMessageException("新增bucket出错，请尝试稍后重试！");
+        if (!insertBucketCollect) {
+            log.warn("insert new bucket collect fail param: [{}]", paramInsertBucketBO);
+            throw new MinOssMessageException("新增Bucket汇总数据出错，请尝试稍后重试！");
         }
         return true;
     }

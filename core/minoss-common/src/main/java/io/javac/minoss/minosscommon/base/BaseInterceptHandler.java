@@ -6,7 +6,7 @@ import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 
 /**
- * 拦截器父类
+ * intercept handler supper
  *
  * @author pencilso
  * @date 2020/1/25 11:05 上午
@@ -22,10 +22,10 @@ public abstract class BaseInterceptHandler implements Handler<RoutingContext> {
     }
 
     /**
-     * 处理token鉴权
+     * check accesstoken
      *
      * @param accesstoken    token
-     * @param routingContext 上下文对象
+     * @param routingContext context
      */
     public abstract void handle(String accesstoken, RoutingContext routingContext);
 }

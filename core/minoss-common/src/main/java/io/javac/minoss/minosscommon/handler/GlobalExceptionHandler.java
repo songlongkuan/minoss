@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 全局异常处理
+ * all exception handler
  *
  * @author pencilso
  * @date 2020/1/24 4:16 下午
@@ -29,13 +29,13 @@ public class GlobalExceptionHandler implements Handler<RoutingContext> {
 
     @PostConstruct
     public void init() {
-        //参数校验失败
+        //param validation fail
         exMap.put(ConstraintViolationException.class, ResponeWrapperConst.VALIDATION_PARAM_FAIL);
         exMap.put(ValidationException.class, ResponeWrapperConst.VALIDATION_PARAM_FAIL);
-        //登录失效
+        //token invalid or expire
         exMap.put(MinOssTokenInvalidException.class, ResponeWrapperConst.LOGIN_INVALID);
         exMap.put(MinOssTokenExpireException.class, ResponeWrapperConst.LOGIN_INVALID);
-        //自定义错误异常信息
+        //custom msg errpr
         exMap.put(MinOssMessageException.class, ResponeWrapperConst.OPERATE_FAIL);
     }
 
@@ -43,7 +43,6 @@ public class GlobalExceptionHandler implements Handler<RoutingContext> {
     public void handle(RoutingContext event) {
         ResponeWrapper<String> responeWrapper = new ResponeWrapper<>();
         Throwable failure = event.failure();
-        failure.printStackTrace();
         Class<? extends Throwable> aClass = failure.getClass();
         Integer code = exMap.get(aClass);
         if (code == null) {
