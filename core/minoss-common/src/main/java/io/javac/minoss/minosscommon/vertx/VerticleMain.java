@@ -52,29 +52,31 @@ public class VerticleMain extends AbstractVerticle {
     private InterceptWrapper interceptWrapper;
 
     /**
-     * controller package 
+     * controller package
      */
     private final String controllerBasePackage[] = {
             "io.javac.minoss.minossappadmin.controller",
             "io.javac.minoss.minossappclient.controller"
     };
 
-
+    /**
+     * vertx deploy start
+     *
+     * @throws Exception
+     */
     @Override
     public void start() throws Exception {
         super.start();
-        //create router
         Router router = Router.router(vertx);
         HttpServer server = vertx.createHttpServer();
-        //start register controller
+        //register controller
         for (String packagePath : controllerBasePackage) {
             registerController(router, packagePath);
         }
-        //register static resources handler
         router.route("/*").handler(StaticHandler.create());
-        //register global exception handler
+        //register all exception global handler
         router.route().failureHandler(globalExceptionHandler);
-        //start listen prot
+        //start listen port
         server.requestHandler(router).listen(minOssProperties.getPort(), handler -> {
             log.info("vertx run prot : [{}] run state : [{}]", minOssProperties.getPort(), handler.succeeded());
         });
