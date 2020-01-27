@@ -9,6 +9,6 @@
 
 数据库设计 <a href="database_design.pdf">database_design.pdf</a>
 
-管理系统api文档：<a href="database_design.pdf">api_doc_admin.html</a>
+管理系统api文档：<a href="database_design.pdf">api_doc_admin.md</a>
 
 客户端api文档： 暂无~
