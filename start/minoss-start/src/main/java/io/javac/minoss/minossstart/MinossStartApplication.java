@@ -11,7 +11,9 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.EventListener;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@EnableTransactionManagement
 @MapperScan("io.javac.minoss.minossdao.mapper")
 @ComponentScan("io.javac.minoss")
 @Slf4j

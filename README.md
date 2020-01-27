@@ -5,3 +5,10 @@
 >技术选型 SpringBoot + Vert.x  + Mybatils Plus
 >
 >还在开发中...   github先占个坑
+
+
+数据库设计 <a href="database_design.pdf">database_design.pdf</a>
+
+管理系统api文档：<a href="database_design.pdf">api_doc_admin.html</a>
+
+客户端api文档： 暂无~

@@ -49,7 +49,9 @@ public class LevelCacheStore extends StringCacheStore {
         if (leveldb != null) return;
         try {
             //work path
-            File folder = new File(minOssProperties.getWorkDir() + ".leveldb");
+            String leveldbPath = minOssProperties.getWorkDir() + ".leveldb";
+            File folder = new File(leveldbPath);
+            log.info("leveldb store path: [{}]", leveldbPath);
             folder.mkdirs();
             DBFactory factory = new Iq80DBFactory();
             Options options = new Options();
@@ -148,9 +150,9 @@ public class LevelCacheStore extends StringCacheStore {
                 if (stringCacheWrapper.isPresent()) {
                     //get expireat time
                     long expireAtTime = stringCacheWrapper.map(CacheWrapper::getExpireAt)
-                            .orElse(-1L);
+                            .orElse(0L);
                     //if expire
-                    if (expireAtTime != -1 && currentTimeMillis > expireAtTime) {
+                    if (expireAtTime > 0 && currentTimeMillis > expireAtTime) {
                         writeBatch.delete(next.getKey());
                         log.debug("deleted the cache: [{}] for expiration", bytesToString(next.getKey()));
                     }

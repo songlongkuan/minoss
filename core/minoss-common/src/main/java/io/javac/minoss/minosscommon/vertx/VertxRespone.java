@@ -40,4 +40,13 @@ public class VertxRespone {
     public void responeSuccess(Object data) {
         respone(new ResponeWrapper(ResponeWrapperConst.SUCCESS, data, "操作成功"));
     }
+
+    public void responeState(boolean state) {
+        if (state) {
+            respone(ResponeWrapper.RESPONE_SUCCESS);
+        } else {
+            respone(ResponeWrapper.RESPONE_FAIL);
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package io.javac.minoss.minosscommon.vertx;
 
 import io.javac.minoss.minosscommon.annotation.RequestBlockingHandler;
+import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestInterceptClear;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.base.BaseInterceptHandler;
@@ -131,7 +132,6 @@ public class VerticleMain extends AbstractVerticle {
                 registerControllerMethod(router, classRequestMapping, controllerClass, controller);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             log.error("registerController fail ", ex);
         }
     }
@@ -195,8 +195,6 @@ public class VerticleMain extends AbstractVerticle {
             //跳过添加拦截器
             return;
         }
-
-
         List<InterceptWrapper.InterceptWrapperPojo> pojoList = interceptWrapper.getPojoList();
         pojoList.forEach(it -> {
             try {

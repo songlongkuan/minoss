@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public class GlobalExceptionHandler implements Handler<RoutingContext> {
     public void init() {
         //参数校验失败
         exMap.put(ConstraintViolationException.class, ResponeWrapperConst.VALIDATION_PARAM_FAIL);
+        exMap.put(ValidationException.class, ResponeWrapperConst.VALIDATION_PARAM_FAIL);
         //登录失效
         exMap.put(MinOssTokenInvalidException.class, ResponeWrapperConst.LOGIN_INVALID);
         exMap.put(MinOssTokenExpireException.class, ResponeWrapperConst.LOGIN_INVALID);

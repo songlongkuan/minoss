@@ -1,16 +1,18 @@
 package io.javac.minoss.minosscommon.utils;
 
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 /**
@@ -48,14 +50,25 @@ public class JsonUtils {
      */
     @NotNull
     public static ObjectMapper createDefaultJsonMapper(@Nullable PropertyNamingStrategy strategy) {
+
+
         // Create object mapper
         ObjectMapper mapper = new ObjectMapper();
         // Configure
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//        mapper.serializerByType(Long.class, ToStringSerializer.instance).serializerByType(Long.TYPE,ToStringSerializer.instance);
         // Set property naming strategy
         if (strategy != null) {
             mapper.setPropertyNamingStrategy(strategy);
         }
+        //设置JSON时间格式
+        SimpleDateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        mapper.setDateFormat(myDateFormat);
+
+        SimpleModule simpleModule = new SimpleModule();
+        //长整数  序列化为String
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance).addSerializer(Long.TYPE, ToStringSerializer.instance);
+        mapper.registerModule(simpleModule);
         return mapper;
     }
 

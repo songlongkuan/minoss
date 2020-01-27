@@ -1,6 +1,6 @@
 package io.javac.minoss.minosscommon.plugin;
 
-import io.javac.minoss.minosscommon.model.jwt.JwtAuthEntity;
+import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -74,18 +74,18 @@ public class JwtPlugin {
      * @param token
      * @return
      */
-    public Optional<JwtAuthEntity> getOauthEntity(@NotEmpty String token) {
-        JwtAuthEntity jwtAuthEntity = null;
+    public Optional<JwtAuthModel> getOauthEntity(@NotEmpty String token) {
+        JwtAuthModel jwtAuthModel = null;
         try {
             Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-            jwtAuthEntity = new JwtAuthEntity()
+            jwtAuthModel = new JwtAuthModel()
                     .setUMid((Long) claims.get(CLAIN_KEY_UID))
                     .setSalt((String) claims.get(CLATIN_KEY_USALT))
                     .setLoginTime((Long) claims.get(CLAIN_KEY_TIME));
         } catch (Exception ex) {
             log.warn("jwt getOauthEntity fail token: [{}]", token,ex);
         }
-        return Optional.ofNullable(jwtAuthEntity);
+        return Optional.ofNullable(jwtAuthModel);
     }
 
 

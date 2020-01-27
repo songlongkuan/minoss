@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class JwtAuthEntity {
+public class JwtAuthModel {
 
     private Long uMid;
 

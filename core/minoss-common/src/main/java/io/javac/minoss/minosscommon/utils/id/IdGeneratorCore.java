@@ -1,6 +1,6 @@
 package io.javac.minoss.minosscommon.utils.id;
 
-import java.util.UUID;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 
 /**
  * Created by SongLongKuan on 2018/7/7/007.
@@ -10,18 +10,11 @@ import java.util.UUID;
  */
 public class IdGeneratorCore {
 
-    /**
-     * 常规行为ID 生成器
-     */
-    private static final IdGenerator idGenerator = new IdGenerator(1, 1);
+//    private static final IdGenerator idGenerator = new IdGenerator(1, 1);
 
-    /**
-     * 生成一个行为ID
-     *
-     * @return
-     */
+
     public static Long generatorId() {
-        return idGenerator.nextId();
+        return IdWorker.getId();
     }
 
 
@@ -31,7 +24,7 @@ public class IdGeneratorCore {
      * @return
      */
     public static String generatorUUID() {
-        return UUID.randomUUID().toString().replace("-", "");
+        return IdWorker.get32UUID();
     }
 
 }
