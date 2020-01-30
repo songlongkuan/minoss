@@ -9,9 +9,9 @@
         <relativePath>../../</relativePath>
     </parent>
     <groupId>io.javac.minoss</groupId>
-    <artifactId>minoss-app-admin</artifactId>
+    <artifactId>minoss-app-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>minoss-app-admin</name>
+    <name>minoss-app-service</name>
     <description>Demo project for Spring Boot</description>
 
 
@@ -24,12 +24,6 @@
             <groupId>io.javac.minoss</groupId>
             <artifactId>minoss-dao</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.javac.minoss.minoss</groupId>
-            <artifactId>minoss-app-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
-
 
 </project>

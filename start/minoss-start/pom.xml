@@ -16,7 +16,7 @@
     <name>minoss-start</name>
     <description>Demo project for Spring Boot</description>
     <dependencies>
-        <!-- moudle-->
+        <!-- core moudle start -->
         <dependency>
             <groupId>io.javac.minoss</groupId>
             <artifactId>minoss-bridge</artifactId>
@@ -37,6 +37,14 @@
             <groupId>io.javac.minoss</groupId>
             <artifactId>minoss-app-admin</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.javac.minoss</groupId>
+            <artifactId>minoss-app-service</artifactId>
+        </dependency>
+        <!-- core moudle end -->
+
+
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>

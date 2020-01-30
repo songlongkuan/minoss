@@ -1,19 +1,24 @@
-package io.javac.minoss.minossappadmin.controller;
+package io.javac.minoss.minossappadmin;
 
-import io.javac.minoss.minossappadmin.service.VertxUserService;
+import io.javac.minoss.minoss.minossappservice.VertxUserService;
+import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestInterceptClear;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.base.VertxControllerHandler;
 import io.javac.minoss.minosscommon.enums.RequestMethod;
 import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
 import io.javac.minoss.minossdao.model.UserModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * @author pencilso
  * @date 2020/1/24 2:55 下午
  */
+@Slf4j
 @Component
 @RequestMapping("/api/admin/user")
 public class VertxUserController {
@@ -25,12 +30,15 @@ public class VertxUserController {
      *
      * @return
      */
+    @RequestBody
     @RequestInterceptClear
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public VertxControllerHandler login() {
         return vertxRequest -> {
-            String loginName = vertxRequest.getParam("loginName").get();
-            String loginPassword = vertxRequest.getParam("loginPassword").get();
+            Optional<String> loginName1 = vertxRequest.getParam("loginName");
+            log.info("loginName :[{}]", loginName1);
+            String loginName = vertxRequest.getParam("loginName").orElse(null);
+            String loginPassword = vertxRequest.getParam("loginPassword").orElse(null);
             vertxUserService.userLogin(vertxRequest, loginName, loginPassword);
         };
     }

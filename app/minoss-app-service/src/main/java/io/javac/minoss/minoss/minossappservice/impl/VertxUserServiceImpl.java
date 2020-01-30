@@ -1,6 +1,6 @@
-package io.javac.minoss.minossappadmin.service.impl;
+package io.javac.minoss.minoss.minossappservice.impl;
 
-import io.javac.minoss.minossappadmin.service.VertxUserService;
+import io.javac.minoss.minoss.minossappservice.VertxUserService;
 import io.javac.minoss.minosscommon.bcrypt.BCryptPasswordEncoder;
 import io.javac.minoss.minosscommon.cache.StringCacheStore;
 import io.javac.minoss.minosscommon.constant.CacheConst;

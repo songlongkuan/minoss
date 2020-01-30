@@ -55,8 +55,8 @@ public class VerticleMain extends AbstractVerticle {
      * controller package
      */
     private final String controllerBasePackage[] = {
-            "io.javac.minoss.minossappadmin.controller",
-            "io.javac.minoss.minossappclient.controller"
+            "io.javac.minoss.minossappadmin",
+            "io.javac.minoss.minossappclient"
     };
 
     /**

@@ -40,6 +40,7 @@
 
         <module>app/minoss-app-client</module>
         <module>app/minoss-app-admin</module>
+        <module>app/minoss-app-service</module>
 
         <module>start/minoss-start</module>
         <module>bridge/minoss-bridge</module>
@@ -76,6 +77,11 @@
             <dependency>
                 <groupId>io.javac.minoss</groupId>
                 <artifactId>minoss-app-client</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.javac.minoss</groupId>
+                <artifactId>minoss-app-service</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
 

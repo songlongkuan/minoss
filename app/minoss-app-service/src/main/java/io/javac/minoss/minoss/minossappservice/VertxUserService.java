@@ -1,4 +1,4 @@
-package io.javac.minoss.minossappadmin.service;
+package io.javac.minoss.minoss.minossappservice;
 
 import io.javac.minoss.minosscommon.vertx.VertxRequest;
 import io.javac.minoss.minossdao.model.UserModel;

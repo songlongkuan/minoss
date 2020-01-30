@@ -1,6 +1,6 @@
-package io.javac.minoss.minossappadmin.controller;
+package io.javac.minoss.minossappadmin;
 
-import io.javac.minoss.minossappadmin.service.VertxBucketService;
+import io.javac.minoss.minoss.minossappservice.VertxBucketService;
 import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.base.VertxControllerHandler;

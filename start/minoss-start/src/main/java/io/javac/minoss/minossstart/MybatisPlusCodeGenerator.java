@@ -33,7 +33,7 @@ public class MybatisPlusCodeGenerator {
         System.out.println(help.toString());
         if (scanner.hasNext()) {
             String ipt = scanner.next();
-            if (StringUtils.isNotEmpty(ipt)) {
+            if (!StringUtils.isBlank(ipt)) {
                 return ipt;
             }
         }
@@ -97,7 +97,7 @@ public class MybatisPlusCodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return   "core/minoss-dao/src/main/resources/mapper/"
+                return "core/minoss-dao/src/main/resources/mapper/"
                         + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });

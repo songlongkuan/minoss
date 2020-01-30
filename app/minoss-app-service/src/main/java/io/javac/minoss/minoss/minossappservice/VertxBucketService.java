@@ -1,4 +1,4 @@
-package io.javac.minoss.minossappadmin.service;
+package io.javac.minoss.minoss.minossappservice;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minosscommon.model.param.ParamInsertBucketBO;

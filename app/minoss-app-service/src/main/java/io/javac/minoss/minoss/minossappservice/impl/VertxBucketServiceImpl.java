@@ -1,7 +1,7 @@
-package io.javac.minoss.minossappadmin.service.impl;
+package io.javac.minoss.minoss.minossappservice.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.javac.minoss.minossappadmin.service.VertxBucketService;
+import io.javac.minoss.minoss.minossappservice.VertxBucketService;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertBucketBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateBucketBO;
