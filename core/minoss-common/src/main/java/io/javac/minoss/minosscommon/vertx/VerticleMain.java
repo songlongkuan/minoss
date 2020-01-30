@@ -6,6 +6,7 @@ import io.javac.minoss.minosscommon.annotation.RequestInterceptClear;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.base.BaseInterceptHandler;
 import io.javac.minoss.minosscommon.config.MinOssProperties;
+import io.javac.minoss.minosscommon.handler.CorsHandler;
 import io.javac.minoss.minosscommon.handler.GlobalExceptionHandler;
 import io.javac.minoss.minosscommon.model.intercept.InterceptWrapper;
 import io.javac.minoss.minosscommon.utils.SpringBootContext;
@@ -21,14 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +66,7 @@ public class VerticleMain extends AbstractVerticle {
     public void start() throws Exception {
         super.start();
         Router router = Router.router(vertx);
-        HttpServer server = vertx.createHttpServer();
+        router.route("/api/*").handler(new CorsHandler());
         //register controller
         for (String packagePath : controllerBasePackage) {
             registerController(router, packagePath);
@@ -76,7 +74,9 @@ public class VerticleMain extends AbstractVerticle {
         router.route("/*").handler(StaticHandler.create());
         //register all exception global handler
         router.route().failureHandler(globalExceptionHandler);
+
         //start listen port
+        HttpServer server = vertx.createHttpServer();
         server.requestHandler(router).listen(minOssProperties.getPort(), handler -> {
             log.info("vertx run prot : [{}] run state : [{}]", minOssProperties.getPort(), handler.succeeded());
         });
@@ -94,7 +94,7 @@ public class VerticleMain extends AbstractVerticle {
         }
 
         try {
-            Resource[] resources = scannerControllerClass(packagePath);
+            Resource[] resources = VerticleUtils.scannerControllerClass(packagePath, resourceLoader);
             for (Resource resource : resources) {
                 String absolutePath = resource.getFile().getAbsolutePath().replace("/", ".");
                 absolutePath = absolutePath.substring(absolutePath.indexOf(packagePath));
@@ -116,22 +116,6 @@ public class VerticleMain extends AbstractVerticle {
         }
     }
 
-    /**
-     * scanner controller class array
-     *
-     * @param packagePath controller package
-     * @return
-     */
-    public Resource[] scannerControllerClass(String packagePath) {
-        ResourcePatternResolver resolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
-        String controllerBasePackagePath = packagePath.replace(".", "/");
-        try {
-            return resolver.getResources(String.format("classpath*:%s/**/*.class", controllerBasePackagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     /**
      * register controller method

@@ -3,9 +3,14 @@ package io.javac.minoss.minosscommon.vertx;
 import io.javac.minoss.minosscommon.enums.RequestMethod;
 import io.vertx.ext.web.Route;
 import io.vertx.ext.web.Router;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 
 /**
  * @author pencilso
@@ -14,7 +19,13 @@ import javax.validation.constraints.NotNull;
 @Validated
 public class VerticleUtils {
 
-
+    /**
+     * build api path
+     *
+     * @param superPath  class api path
+     * @param methodPath method api path
+     * @return
+     */
     public static String buildApiPath(@NotNull String superPath, @NotNull String methodPath) {
         if (!superPath.endsWith("/")) {
             superPath += "/";
@@ -25,6 +36,14 @@ public class VerticleUtils {
         return superPath + methodPath;
     }
 
+    /**
+     * build route api path method
+     *
+     * @param url           api path
+     * @param router        router
+     * @param requestMethod method enum
+     * @return
+     */
     public static Route buildRouterUrl(String url, Router router, RequestMethod requestMethod) {
         //路由
         Route route;
@@ -48,4 +67,24 @@ public class VerticleUtils {
         }
         return route;
     }
+
+
+    /**
+     * scanner controller class array
+     *
+     * @param packagePath    controller package
+     * @param resourceLoader SpringBoot  resourceLoader
+     * @return
+     */
+    public static Resource[] scannerControllerClass(String packagePath, ResourceLoader resourceLoader) {
+        ResourcePatternResolver resolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
+        String controllerBasePackagePath = packagePath.replace(".", "/");
+        try {
+            return resolver.getResources(String.format("classpath*:%s/**/*.class", controllerBasePackagePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new Resource[]{};
+    }
+
 }

@@ -178,6 +178,7 @@
         request("/api/admin/user/login", "POST", data, function (result) {
             layer.msg(result.message)
             document.cookie = "accesstoken=" + result.data + ";path=/ ;";
+            window.location.href = "../index.html"
         })
     }
 </script>
