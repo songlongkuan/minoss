@@ -1,12 +1,15 @@
 package io.javac.minoss.minosscommon.vertx;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javac.minoss.minosscommon.constant.ResponeWrapperConst;
 import io.javac.minoss.minosscommon.model.respone.ResponeWrapper;
-import io.javac.minoss.minosscommon.utils.JsonUtils;
+import io.javac.minoss.minosscommon.toolkit.JsonUtils;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 /**
  * @author pencilso
@@ -41,6 +44,19 @@ public class VertxRespone {
         respone(new ResponeWrapper(ResponeWrapperConst.SUCCESS, data, "操作成功"));
     }
 
+
+    public void responePage(IPage<?> iPage) {
+        ResponeWrapper.ResponePageWrapper<List> responePageWrapper = new ResponeWrapper.ResponePageWrapper<List>();
+        responePageWrapper
+                .setTotalPages((int) iPage.getPages())
+                .setTotalData((int) iPage.getTotal())
+                .setCurrentPage((int) iPage.getCurrent())
+                .setCode(ResponeWrapperConst.SUCCESS)
+                .setMessage("操作成功")
+                .setData(iPage.getRecords());
+        respone(responePageWrapper);
+    }
+
     public void responeState(boolean state) {
         if (state) {
             respone(ResponeWrapper.RESPONE_SUCCESS);
@@ -48,5 +64,6 @@ public class VertxRespone {
             respone(ResponeWrapper.RESPONE_FAIL);
         }
     }
+
 
 }

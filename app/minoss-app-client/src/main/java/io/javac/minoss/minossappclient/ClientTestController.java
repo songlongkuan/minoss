@@ -1,9 +1,9 @@
-package io.javac.minoss.minossappclient.controller;
+package io.javac.minoss.minossappclient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.enums.RequestMethod;
-import io.javac.minoss.minosscommon.utils.JsonUtils;
+import io.javac.minoss.minosscommon.toolkit.JsonUtils;
 import io.javac.minoss.minossdao.model.UserModel;
 import io.javac.minoss.minossdao.service.UserService;
 import io.vertx.core.Handler;

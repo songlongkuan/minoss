@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加Bucket存储空间</title>
+    <link rel="stylesheet" href="../../lib/layui/css/layui.css" media="all">
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-item" style="margin-top: 30px">
+        <label class="layui-form-label">名称：</label>
+        <div class="layui-input-block">
+            <input type="text" name="bucketName" required lay-verify="required" placeholder="" autocomplete="off"
+                   class="layui-input" style="width: 200px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">存储路径：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="bucketStorePath" required lay-verify="required" placeholder="" autocomplete="off"
+                   class="layui-input" style="width: 200px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="bucketRight" value="1" title="私有" checked="">
+            <input type="radio" name="bucketRight" value="2" title="公共读">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo" type="button">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="../../lib/layui/layui.all.js"></script>
+<script src="../../lib/httputils.js"></script>
+<script src="../../lib/common.js"></script>
+<script>
+
+    var bucketmid = getQueryString("bucketmid");
+
+    layui.use('form', function () {
+        var form = layui.form;
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            var json = JSON.stringify(data.field);
+            if (bucketmid === '') {
+                addBucket(json)
+            }
+            return false;
+        });
+    });
+
+    function addBucket(json) {
+        requestJson("/api/admin/bucket/insertbucket", json, function (result) {
+            layer.msg(result.message)
+        })
+    }
+
+</script>
+</body>
+</html>

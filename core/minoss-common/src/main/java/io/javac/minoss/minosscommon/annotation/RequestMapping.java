@@ -27,5 +27,4 @@ public @interface RequestMapping {
      * @return
      */
     RequestMethod method() default RequestMethod.GET;
-
 }

@@ -27,6 +27,9 @@ public class VerticleUtils {
      * @return
      */
     public static String buildApiPath(@NotNull String superPath, @NotNull String methodPath) {
+        if (!superPath.startsWith("/")) {
+            superPath = "/" + superPath;
+        }
         if (!superPath.endsWith("/")) {
             superPath += "/";
         }

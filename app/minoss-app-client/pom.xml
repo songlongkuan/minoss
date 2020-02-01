@@ -18,11 +18,8 @@
     <dependencies>
         <dependency>
             <groupId>io.javac.minoss</groupId>
-            <artifactId>minoss-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.javac.minoss</groupId>
-            <artifactId>minoss-dao</artifactId>
+            <artifactId>minoss-app-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

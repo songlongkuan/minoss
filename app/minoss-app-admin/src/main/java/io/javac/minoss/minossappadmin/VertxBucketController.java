@@ -1,5 +1,6 @@
 package io.javac.minoss.minossappadmin;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minoss.minossappservice.VertxBucketService;
 import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
@@ -34,8 +35,8 @@ public class VertxBucketController {
     @RequestMapping("querybucketlist")
     public VertxControllerHandler queryBucketList() {
         return vertxRequest -> {
-            List<BucketVO> bucketVOS = vertxBucketService.listPage(vertxRequest.buildPage());
-            vertxRequest.buildVertxRespone().responeSuccess(bucketVOS);
+            Page<BucketVO> bucketVOPage = vertxBucketService.listPage(vertxRequest.buildPage());
+            vertxRequest.buildVertxRespone().responePage(bucketVOPage);
         };
     }
 
@@ -44,10 +45,11 @@ public class VertxBucketController {
      *
      * @return
      */
+    @RequestBody
     @RequestMapping(value = "insertbucket", method = RequestMethod.POST)
     public VertxControllerHandler insertBucket() {
         return vertxRequest -> {
-            ParamInsertBucketBO paramInsertBucketBO = vertxRequest.getParamBean(ParamInsertBucketBO.class);
+            ParamInsertBucketBO paramInsertBucketBO = vertxRequest.getBodyJsonToBean(ParamInsertBucketBO.class);
             boolean success = vertxBucketService.insert(paramInsertBucketBO);
             vertxRequest.buildVertxRespone().responeState(success);
         };
@@ -62,7 +64,7 @@ public class VertxBucketController {
     @RequestMapping(value = "updatebucket", method = RequestMethod.POST)
     public VertxControllerHandler updateBucket() {
         return vertxRequest -> {
-            ParamUpdateBucketBO paramUpdateBucketBO = vertxRequest.getParamBean(ParamUpdateBucketBO.class);
+            ParamUpdateBucketBO paramUpdateBucketBO = vertxRequest.getBodyJsonToBean(ParamUpdateBucketBO.class);
             BucketModel bucketModel = vertxBucketService.getBucketModel(paramUpdateBucketBO.getMid());
             //更新bucket model
             boolean success = vertxBucketService.update(bucketModel.getVersion(), paramUpdateBucketBO);

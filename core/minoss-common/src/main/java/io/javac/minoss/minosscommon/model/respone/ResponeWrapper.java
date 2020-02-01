@@ -1,5 +1,6 @@
 package io.javac.minoss.minosscommon.model.respone;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.javac.minoss.minosscommon.constant.ResponeWrapperConst;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,4 +25,25 @@ public class ResponeWrapper<V> {
     public static final ResponeWrapper<String> RESPONE_FAIL = new ResponeWrapper<>(ResponeWrapperConst.OPERATE_FAIL, null, "操作失败");
 
 
+    /**
+     * data page respone wrapper
+     *
+     * @param <L> list
+     */
+    @Data
+    @Accessors(chain = true)
+    public static class ResponePageWrapper<L> extends ResponeWrapper<L> {
+        /**
+         * data total count
+         */
+        private int totalData;
+        /**
+         * data page total count
+         */
+        private int totalPages;
+        /**
+         * current page
+         */
+        private int currentPage;
+    }
 }

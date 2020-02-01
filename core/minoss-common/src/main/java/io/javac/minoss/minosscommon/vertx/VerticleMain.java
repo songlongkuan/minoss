@@ -9,7 +9,7 @@ import io.javac.minoss.minosscommon.config.MinOssProperties;
 import io.javac.minoss.minosscommon.handler.CorsHandler;
 import io.javac.minoss.minosscommon.handler.GlobalExceptionHandler;
 import io.javac.minoss.minosscommon.model.intercept.InterceptWrapper;
-import io.javac.minoss.minosscommon.utils.SpringBootContext;
+import io.javac.minoss.minosscommon.toolkit.SpringBootContext;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServer;

@@ -2,7 +2,7 @@ package io.javac.minoss.minosscommon.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
-import io.javac.minoss.minosscommon.utils.JsonUtils;
+import io.javac.minoss.minosscommon.toolkit.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;

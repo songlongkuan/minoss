@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javac.minoss.minosscommon.cache.CacheWrapper;
 import io.javac.minoss.minosscommon.cache.StringCacheStore;
 import io.javac.minoss.minosscommon.config.MinOssProperties;
-import io.javac.minoss.minosscommon.utils.JsonUtils;
+import io.javac.minoss.minosscommon.toolkit.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.iq80.leveldb.*;
 import org.iq80.leveldb.impl.Iq80DBFactory;

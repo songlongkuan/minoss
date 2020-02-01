@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bucket 列表</title>
+    <link rel="stylesheet" href="../../lib/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>Bucket 存储空间列表</legend>
+</fieldset>
+
+<table class="layui-hide" id="buckettable" lay-filter="buckettable"></table>
+
+<script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="../../lib/httputils.js"></script>
+<script src="../../lib/layui/layui.all.js"></script>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addBucket" type="button" onclick="addBucket()">新增Bucket
+        </button>
+    </div>
+</script>
+<script type="text/html" id="storeUsedSize">
+    {{#  if(d.storeUsedSize == 0 ){ }}
+    0 kb
+    {{#  } else if(d.acEnableScreen < 1024 ) { }}
+    d.storeUsedSize 字节
+    {{#  } else { }}
+    (d.storeUsedSize / 1024 /1024 ) MB
+    {{#  } }}
+</script>
+<script type="text/html" id="bucketRight">
+    {{#  if(d.bucketRight ==1 ){ }}
+    私有
+    {{#  } else if(d.acEnableFlow ==2) { }}
+    公共读
+    {{#  } else { }}
+    未知
+    {{#  } }}
+</script>
+<script>
+
+
+    layui.use(['form', 'layedit', 'laydate', 'table'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+        table = layui.table;
+
+        $.ajaxSetup({
+            xhrFields: {
+                withCredentials: true
+            },
+        });
+        queryBucketList();
+    });
+
+    function queryBucketList() {
+        table.render({ //其它参数在此省略
+            elem: '#buckettable',
+            loading: true,
+            url: baseApiPath + '/api/admin/bucket/querybucketlist',
+            toolbar: '#toolbarDemo',
+            method: 'get', //如果无需自定义HTTP类型，可不加该参数
+            request: {pageName: 'pageNum', limitName: 'pageSize'}, //如果无需自定义请求参数，可不加该参数
+            response: {
+                statusName: 'code',
+                statusCode: 0,
+                msgName: 'message',
+                countName: 'totalData',
+                dataName: 'data'
+            }, //如果无需自定义数据响应名称，可不加该参数
+            cols: [[
+                {field: 'bucketMid', width: 200, title: 'Bucket ID', align: 'center'}
+                , {field: 'bucketName', width: 200, title: 'Bucket 名称', align: 'center'}
+                , {field: 'bucketStorePath', width: 200, title: '存储路径', align: 'center'}
+                , {field: 'bucketRight', width: 100, title: '权限', align: 'center', templet: '#bucketRight'}
+                , {field: 'storeUsedSize', width: 100, title: '已使用空间', align: 'center', templet: '#storeUsedSize'}
+                , {field: 'storeFileSize', width: 100, title: '文件总数', align: 'center'}
+                , {field: 'createDate', width: 200, title: '创建时间', align: 'center'}
+                , {field: 'updateDate', width: 200, title: '更新时间', align: 'center'}
+            ]],
+            page: true,
+            limit: 20
+        });
+
+        // //监听行工具事件
+        // table.on('tool(buckettable)', function (obj) {
+        //     layer.msg()
+        //     console.log(obj)
+        // });
+
+
+    }
+
+    function addBucket() {
+        layer.open({
+            title: '修改广告控制',
+            area: ['480px', '500px'],
+            type: 2,
+            offset: 'auto',
+            id: 'addAdConsole',
+            content: ["page/bucket/updatebucket.html", 'no'],
+            btnAlign: 'c',
+            shade: 0.5,
+            yes: function () {
+                layer.closeAll();
+            }
+        });
+    }
+</script>
+</body>
+</html>

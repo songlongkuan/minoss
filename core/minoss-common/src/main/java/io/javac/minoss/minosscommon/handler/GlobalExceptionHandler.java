@@ -1,6 +1,7 @@
 package io.javac.minoss.minosscommon.handler;
 
 import io.javac.minoss.minosscommon.constant.ResponeWrapperConst;
+import io.javac.minoss.minosscommon.exception.MinOssAssertException;
 import io.javac.minoss.minosscommon.exception.MinOssTokenExpireException;
 import io.javac.minoss.minosscommon.exception.MinOssTokenInvalidException;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
@@ -37,6 +38,7 @@ public class GlobalExceptionHandler implements Handler<RoutingContext> {
         exMap.put(MinOssTokenExpireException.class, ResponeWrapperConst.LOGIN_INVALID);
         //custom msg errpr
         exMap.put(MinOssMessageException.class, ResponeWrapperConst.OPERATE_FAIL);
+        exMap.put(MinOssAssertException.class, ResponeWrapperConst.OPERATE_FAIL);
     }
 
     @Override

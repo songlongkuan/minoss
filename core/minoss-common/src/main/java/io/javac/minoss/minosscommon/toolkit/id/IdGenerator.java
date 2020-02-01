@@ -1,4 +1,4 @@
-package io.javac.minoss.minosscommon.utils.id;
+package io.javac.minoss.minosscommon.toolkit.id;
 
 /**
  * SnowFlake算法 64位Long类型生成唯一ID 第一位0，表明正数 2-42，41位，表示毫秒时间戳差值，起始值自定义

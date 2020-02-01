@@ -1,7 +1,6 @@
-package io.javac.minoss.minosscommon.utils;
+package io.javac.minoss.minosscommon.toolkit;
 
 import org.springframework.lang.NonNull;
-import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;

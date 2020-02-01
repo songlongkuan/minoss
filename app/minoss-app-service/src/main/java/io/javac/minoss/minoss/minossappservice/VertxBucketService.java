@@ -23,7 +23,7 @@ public interface VertxBucketService {
      * @param page
      * @return
      */
-    List<BucketVO> listPage(Page page);
+    Page<BucketVO> listPage(Page page);
 
     /**
      * 查询新的bucket

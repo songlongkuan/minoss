@@ -1,6 +1,6 @@
 package io.javac.minoss.minossstart;
 
-import io.javac.minoss.minosscommon.utils.SpringBootContext;
+import io.javac.minoss.minosscommon.toolkit.SpringBootContext;
 import io.javac.minoss.minosscommon.vertx.VerticleMain;
 import io.vertx.core.Vertx;
 import lombok.extern.slf4j.Slf4j;

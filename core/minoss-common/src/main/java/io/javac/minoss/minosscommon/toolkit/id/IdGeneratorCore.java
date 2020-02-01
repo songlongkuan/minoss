@@ -1,4 +1,4 @@
-package io.javac.minoss.minosscommon.utils.id;
+package io.javac.minoss.minosscommon.toolkit.id;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 

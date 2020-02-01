@@ -37,10 +37,6 @@
             <groupId>io.javac.minoss</groupId>
             <artifactId>minoss-app-admin</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.javac.minoss</groupId>
-            <artifactId>minoss-app-service</artifactId>
-        </dependency>
         <!-- core moudle end -->
 
 

@@ -1,4 +1,4 @@
-package io.javac.minoss.minosscommon.utils;
+package io.javac.minoss.minosscommon.toolkit;
 
 import java.util.HashMap;
 

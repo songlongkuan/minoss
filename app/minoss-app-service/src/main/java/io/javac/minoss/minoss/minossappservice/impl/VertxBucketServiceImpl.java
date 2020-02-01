@@ -6,7 +6,7 @@ import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertBucketBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateBucketBO;
 import io.javac.minoss.minosscommon.model.vo.BucketVO;
-import io.javac.minoss.minosscommon.utils.id.IdGeneratorCore;
+import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
 import io.javac.minoss.minossdao.model.BucketCollectModel;
 import io.javac.minoss.minossdao.model.BucketModel;
 import io.javac.minoss.minossdao.service.BucketCollectService;
@@ -42,7 +42,7 @@ public class VertxBucketServiceImpl implements VertxBucketService {
 
 
     @Override
-    public List<BucketVO> listPage(Page page) {
+    public Page<BucketVO> listPage(Page page) {
         //查询bucket空间列表
         Page<BucketModel> bucketModelPage = bucketService.page(page);
         List<BucketModel> bucketModelList = bucketModelPage.getRecords();
@@ -60,7 +60,10 @@ public class VertxBucketServiceImpl implements VertxBucketService {
                 responeBucketVO.add(bucketVO);
             });
         });
-        return responeBucketVO;
+        Page<BucketVO> bucketVOPage = new Page<>();
+        BeanUtils.copyProperties(bucketModelPage, bucketVOPage);
+        bucketVOPage.setRecords(responeBucketVO);
+        return bucketVOPage;
     }
 
     @Transactional

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -177,7 +176,13 @@
         };
         request("/api/admin/user/login", "POST", data, function (result) {
             layer.msg(result.message)
-            document.cookie = "accesstoken=" + result.data + ";path=/ ;";
+
+            // setCookie("accesstoken", result.data.accesstoken)
+            clearAllCookie()
+
+            var d = new Date();
+            d.setHours(d.getHours() + 1);
+            document.cookie = "accesstoken=" + result.data.accesstoken + ";path=/ ;expires=" + d.toGMTString();
             window.location.href = "../index.html"
         })
     }

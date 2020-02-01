@@ -2,7 +2,8 @@ package io.javac.minoss.minosscommon.vertx;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
-import io.javac.minoss.minosscommon.utils.JsonUtils;
+import io.javac.minoss.minosscommon.toolkit.Assert;
+import io.javac.minoss.minosscommon.toolkit.JsonUtils;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.ext.web.RoutingContext;
@@ -140,8 +141,9 @@ public class VertxRequest {
      * @param paramClass
      * @return
      */
-    public <T> T getParamBean(Class<?> paramClass) {
+    public <T> T getBodyJsonToBean(Class<?> paramClass) {
         String bodyAsString = routingContext.getBodyAsString();
+        Assert.notBlank(bodyAsString, "body json can not be null");
         T param = null;
         try {
             param = (T) JsonUtils.jsonToObject(bodyAsString, paramClass);
