@@ -20,6 +20,8 @@
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="addBucket" type="button" onclick="addBucket()">新增Bucket
         </button>
+        <button class="layui-btn layui-btn-sm" lay-event="addBucket" type="button" onclick="queryBucketList()">刷新列表
+        </button>
     </div>
 </script>
 <script type="text/html" id="storeUsedSize">
@@ -34,11 +36,16 @@
 <script type="text/html" id="bucketRight">
     {{#  if(d.bucketRight ==1 ){ }}
     私有
-    {{#  } else if(d.acEnableFlow ==2) { }}
+    {{#  } else if(d.bucketRight ==2) { }}
     公共读
     {{#  } else { }}
     未知
     {{#  } }}
+</script>
+<script type="text/html" id="editBar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="edit">编辑</button>
+    </div>
 </script>
 <script>
 
@@ -82,24 +89,46 @@
                 , {field: 'storeFileSize', width: 100, title: '文件总数', align: 'center'}
                 , {field: 'createDate', width: 200, title: '创建时间', align: 'center'}
                 , {field: 'updateDate', width: 200, title: '更新时间', align: 'center'}
+                , {fixed: 'right', title: '操作', toolbar: '#editBar', width: 100}
             ]],
             page: true,
             limit: 20
         });
 
-        // //监听行工具事件
-        // table.on('tool(buckettable)', function (obj) {
-        //     layer.msg()
-        //     console.log(obj)
-        // });
+        //监听行工具事件
+        table.on('tool(buckettable)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case "edit":
+                    editBucket(data.bucketMid)
+                    break
+            }
+        });
 
 
     }
 
+
+    function editBucket(bucketMid) {
+        layer.open({
+            title: '修改Bucket',
+            area: ['364px', '360px'],
+            type: 2,
+            offset: 'auto',
+            id: 'addAdConsole',
+            content: ["page/bucket/updatebucket.html?bucketmid=" + bucketMid, 'no'],
+            btnAlign: 'c',
+            shade: 0.5,
+            yes: function () {
+                layer.closeAll();
+            }
+        });
+    }
+
     function addBucket() {
         layer.open({
-            title: '修改广告控制',
-            area: ['480px', '500px'],
+            title: '添加Bucket',
+            area: ['364px', '360px'],
             type: 2,
             offset: 'auto',
             id: 'addAdConsole',
