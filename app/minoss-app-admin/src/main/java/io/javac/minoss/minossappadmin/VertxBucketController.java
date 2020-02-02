@@ -9,9 +9,7 @@ import io.javac.minoss.minosscommon.enums.RequestMethod;
 import io.javac.minoss.minosscommon.model.param.ParamInsertBucketBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateBucketBO;
 import io.javac.minoss.minosscommon.model.vo.BucketVO;
-import io.javac.minoss.minossdao.model.BucketCollectModel;
 import io.javac.minoss.minossdao.model.BucketModel;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
