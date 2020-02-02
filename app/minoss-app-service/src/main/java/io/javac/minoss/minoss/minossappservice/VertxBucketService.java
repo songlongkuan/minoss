@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minosscommon.model.param.ParamInsertBucketBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateBucketBO;
 import io.javac.minoss.minosscommon.model.vo.BucketVO;
+import io.javac.minoss.minossdao.model.BucketCollectModel;
 import io.javac.minoss.minossdao.model.BucketModel;
 
 import javax.validation.Valid;
@@ -45,9 +46,23 @@ public interface VertxBucketService {
     /**
      * 获取bucket model
      *
-     * @param mid bucket唯一ID
+     * @param bucketMid bucket唯一ID
      * @return
      */
-    BucketModel getBucketModel(@NotNull Long mid);
+    BucketModel getBucketModel(@NotNull Long bucketMid);
 
+
+    /**
+     * get bucket collect model by bucketMid
+     * @param bucketMid
+     * @return
+     */
+    BucketCollectModel getBucketCollect(@NotNull Long bucketMid);
+
+    /**
+     * get bucket vo model by bucketMid
+     * @param bucketMid
+     * @return
+     */
+    BucketVO getBucketVOModel(@NotNull Long bucketMid);
 }

@@ -1,6 +1,7 @@
 package io.javac.minoss.minosscommon.vertx;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
 import io.javac.minoss.minosscommon.toolkit.Assert;
 import io.javac.minoss.minosscommon.toolkit.JsonUtils;
@@ -154,4 +155,13 @@ public class VertxRequest {
         return param;
     }
 
+    /**
+     * 获取参数 并且不能为空
+     *
+     * @param key
+     * @return
+     */
+    public String getParamNotBlank(String key) {
+        return getParam(key).orElseThrow(() -> new MinOssMessageException(key + " can not be null"));
+    }
 }

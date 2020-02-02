@@ -9,11 +9,11 @@ import io.javac.minoss.minosscommon.enums.RequestMethod;
 import io.javac.minoss.minosscommon.model.param.ParamInsertBucketBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateBucketBO;
 import io.javac.minoss.minosscommon.model.vo.BucketVO;
+import io.javac.minoss.minossdao.model.BucketCollectModel;
 import io.javac.minoss.minossdao.model.BucketModel;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 存储空间 控制器
@@ -28,7 +28,7 @@ public class VertxBucketController {
     private VertxBucketService vertxBucketService;
 
     /**
-     * 查询存储空间列表
+     * query bucket list for page
      *
      * @return
      */
@@ -41,7 +41,7 @@ public class VertxBucketController {
     }
 
     /**
-     * 添加新的bucket
+     * insert new bucket
      *
      * @return
      */
@@ -56,7 +56,7 @@ public class VertxBucketController {
     }
 
     /**
-     * 更新bucket
+     * update old bucket
      *
      * @return
      */
@@ -72,4 +72,17 @@ public class VertxBucketController {
         };
     }
 
+    /**
+     * query bucket detail
+     *
+     * @return
+     */
+    @RequestMapping("querybucketdetail")
+    public VertxControllerHandler queryBucketDetail() {
+        return vertxRequest -> {
+            String bucketMid = vertxRequest.getParamNotBlank("mid");
+            BucketVO bucketVO = vertxBucketService.getBucketVOModel(Long.valueOf(bucketMid));
+            vertxRequest.buildVertxRespone().responeSuccess(bucketVO);
+        };
+    }
 }

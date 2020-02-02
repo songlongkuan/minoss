@@ -6,6 +6,7 @@ import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertBucketBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateBucketBO;
 import io.javac.minoss.minosscommon.model.vo.BucketVO;
+import io.javac.minoss.minosscommon.toolkit.Assert;
 import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
 import io.javac.minoss.minossdao.model.BucketCollectModel;
 import io.javac.minoss.minossdao.model.BucketModel;
@@ -104,7 +105,25 @@ public class VertxBucketServiceImpl implements VertxBucketService {
 
 
     @Override
-    public BucketModel getBucketModel(@NotNull Long mid) {
-        return bucketService.getByMid(mid);
+    public BucketModel getBucketModel(@NotNull Long bucketMid) {
+        return bucketService.getByMid(bucketMid);
+    }
+
+    @Override
+    public BucketCollectModel getBucketCollect(@NotNull Long bucketMid) {
+        return bucketCollectService.lambdaQuery().eq(BucketCollectModel::getBucketMid, bucketMid).one();
+    }
+
+    @Override
+    public BucketVO getBucketVOModel(@NotNull Long bucketMid) {
+        BucketModel bucketModel = getBucketModel(bucketMid);
+        BucketCollectModel bucketCollect = getBucketCollect(bucketMid);
+        //check model null
+        Assert.notNull(bucketModel, "query bucket model fail ");
+        Assert.notNull(bucketCollect, "query bucketcollect model fail ");
+        BucketVO bucketVO = new BucketVO();
+        BeanUtils.copyProperties(bucketModel, bucketVO);
+        BeanUtils.copyProperties(bucketCollect, bucketVO);
+        return bucketVO;
     }
 }
