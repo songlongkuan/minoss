@@ -6,7 +6,7 @@ import io.javac.minoss.minosscommon.cache.StringCacheStore;
 import io.javac.minoss.minosscommon.constant.CacheConst;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.plugin.JwtPlugin;
-import io.javac.minoss.minosscommon.toolkit.StringV;
+import io.javac.minoss.minosscommon.toolkit.Kv;
 import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
 import io.javac.minoss.minosscommon.vertx.VertxRequest;
 import io.javac.minoss.minossdao.model.UserModel;
@@ -55,7 +55,7 @@ public class VertxUserServiceImpl implements VertxUserService {
         userService.updateModelByMid(
                 new UserModel().setJwtSalt(jwtSalt).setJwtToken(accesstoken).setVersion(userModel.getVersion()),
                 userModel.getMid());
-        vertxRequest.buildVertxRespone().responeSuccess(StringV.by("accesstoken", accesstoken));
+        vertxRequest.buildVertxRespone().responeSuccess(Kv.stringStringKv().set("accesstoken", accesstoken));
         //put new jwt salt
         stringCacheStore.put(CacheConst.CACHE_USER_JWT_SALT + userModel.getMid(), jwtSalt);
         log.debug("user login success by  [{}]  new accesstoken [{}]  jwtSalt [{}]", loginName, accesstoken, jwtSalt);
