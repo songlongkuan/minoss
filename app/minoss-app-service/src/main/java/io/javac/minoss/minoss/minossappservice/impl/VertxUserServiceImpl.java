@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 /**
  * @author pencilso
@@ -58,7 +59,7 @@ public class VertxUserServiceImpl implements VertxUserService {
     }
 
     @Override
-    public UserModel getByuMid(@NotNull Long uMid) {
-        return userService.getByMid(uMid);
+    public Optional<UserModel> getByuMid(@NotNull Long uMid) {
+        return Optional.ofNullable(userService.getByMid(uMid));
     }
 }

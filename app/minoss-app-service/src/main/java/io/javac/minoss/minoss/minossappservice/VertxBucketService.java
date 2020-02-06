@@ -9,36 +9,35 @@ import io.javac.minoss.minossdao.model.BucketModel;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
- * vertx 接口 Bucket 接口
+ * controller bucket service
  *
  * @author pencilso
  * @date 2020/1/25 10:16 下午
  */
 public interface VertxBucketService {
     /**
-     * 查询列表 并且分页
+     * query bucket list for page
      *
      * @param page
-     * @return
+     * @return bucket vo model
      */
-    Page<BucketVO> listPage(Page page);
+    Page<BucketVO> listPageVO(Page page);
 
     /**
-     * 查询新的bucket
+     * add new bucket
      *
-     * @param paramInsertBucketBO 新增bucket的参数
+     * @param paramInsertBucketBO param
      * @return
      */
     boolean insert(@Valid ParamInsertBucketBO paramInsertBucketBO);
 
     /**
-     * 更新bucket
+     * update bucket
      *
-     * @param version             乐观锁版本
-     * @param paramUpdateBucketBO 更新bucket的参数
+     * @param version             lock version
+     * @param paramUpdateBucketBO update param
      * @return
      */
     boolean update(Integer version, @Valid ParamUpdateBucketBO paramUpdateBucketBO);
@@ -54,6 +53,7 @@ public interface VertxBucketService {
 
     /**
      * get bucket collect model by bucketMid
+     *
      * @param bucketMid
      * @return
      */
@@ -61,6 +61,7 @@ public interface VertxBucketService {
 
     /**
      * get bucket vo model by bucketMid
+     *
      * @param bucketMid
      * @return
      */

@@ -6,9 +6,10 @@ import io.vertx.ext.web.RoutingContext;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 /**
- * vertx 接口 User 服务
+ * controller  User service
  *
  * @author pencilso
  * @date 2020/1/24 3:14 下午
@@ -16,19 +17,19 @@ import javax.validation.constraints.NotNull;
 public interface VertxUserService {
 
     /**
-     * 用户登录
+     * user login
      *
-     * @param vertxRequest 上下文对象
-     * @param loginName      登录账号
-     * @param loginPassword  登录密码
+     * @param vertxRequest  vertxRequest
+     * @param loginName     loginName
+     * @param loginPassword loginPassword
      */
     void userLogin(@NotNull VertxRequest vertxRequest, @NotEmpty String loginName, @NotEmpty String loginPassword);
 
     /**
-     * 获取用户模型
+     * query user model
      *
-     * @param uMid 用户id
-     * @return  用户模型
+     * @param uMid user mid
+     * @return user model
      */
-    UserModel getByuMid(@NotNull Long uMid);
+    Optional<UserModel> getByuMid(@NotNull Long uMid);
 }

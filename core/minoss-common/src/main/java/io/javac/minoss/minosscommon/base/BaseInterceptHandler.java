@@ -16,16 +16,17 @@ public abstract class BaseInterceptHandler implements Handler<RoutingContext> {
 
     @Override
     public void handle(RoutingContext event) {
-        String accesstoken = VertxRequest.build(event).getAccessToken().orElseThrow(MinOssTokenInvalidException::new);
+        VertxRequest vertxRequest = VertxRequest.build(event);
+        String accesstoken = vertxRequest.getAccessToken().orElseThrow(MinOssTokenInvalidException::new);
         //next
-        handle(accesstoken, event);
+        handle(accesstoken, event, vertxRequest);
     }
 
     /**
      * check accesstoken
      *
-     * @param accesstoken    token
-     * @param routingContext context
+     * @param accesstoken  token
+     * @param vertxRequest vertxRequest
      */
-    public abstract void handle(String accesstoken, RoutingContext routingContext);
+    public abstract void handle(String accesstoken, RoutingContext routingContext, VertxRequest vertxRequest);
 }

@@ -16,10 +16,13 @@ public class MinOssProperties {
     private int port = 8080;
 
     /**
-     * 工作目录
+     * working dir
      */
     private String workDir = (MinOssConst.USER_HOME.endsWith(File.separator) ? MinOssConst.USER_HOME : MinOssConst.USER_HOME + File.separator)
             + ".minoss" + File.separator;
 
-
+    /**
+     * request respone ....  logs out
+     */
+    private boolean devlog = false;
 }

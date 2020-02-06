@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * 新增bucket 参数
+ * insert bucket param model
  *
  * @author pencilso
  * @date 2020/1/27 5:06 下午

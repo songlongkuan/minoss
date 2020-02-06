@@ -10,3 +10,8 @@ spring:
     #数据库用户密码
     password: 1237654321
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+minoss:
+  port: 8080
+  devlog: true

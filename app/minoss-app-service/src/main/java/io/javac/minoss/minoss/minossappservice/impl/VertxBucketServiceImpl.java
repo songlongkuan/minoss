@@ -43,7 +43,7 @@ public class VertxBucketServiceImpl implements VertxBucketService {
 
 
     @Override
-    public Page<BucketVO> listPage(Page page) {
+    public Page<BucketVO> listPageVO(Page page) {
         //查询bucket空间列表
         Page<BucketModel> bucketModelPage = bucketService.page(page);
         List<BucketModel> bucketModelList = bucketModelPage.getRecords();
@@ -73,20 +73,20 @@ public class VertxBucketServiceImpl implements VertxBucketService {
         BucketModel bucketModel = new BucketModel();
         BeanUtils.copyProperties(paramInsertBucketBO, bucketModel);
         bucketModel.setMid(IdGeneratorCore.generatorId());
-        boolean insertBucket = bucketService.save(bucketModel);
-        if (!insertBucket) {
+        //check save bucket if success
+        if (!bucketService.save(bucketModel)) {
             log.warn("insert new bucket fail param: [{}]", paramInsertBucketBO);
             throw new MinOssMessageException("新增Bucket出错，请尝试稍后重试！");
         }
 
-        //插入统计汇总 表
+        //create bucket collect model
         BucketCollectModel bucketCollectModel = new BucketCollectModel();
         bucketCollectModel.setBucketMid(bucketModel.getMid())
                 .setStoreFileSize(0L)
                 .setStoreUsedSize(0L)
                 .setMid(IdGeneratorCore.generatorId());
-        boolean insertBucketCollect = bucketCollectService.save(bucketCollectModel);
-        if (!insertBucketCollect) {
+        //check save conllect if success
+        if (!bucketCollectService.save(bucketCollectModel)) {
             log.warn("insert new bucket collect fail param: [{}]", paramInsertBucketBO);
             throw new MinOssMessageException("新增Bucket汇总数据出错，请尝试稍后重试！");
         }

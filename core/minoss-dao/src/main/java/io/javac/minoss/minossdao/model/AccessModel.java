@@ -21,10 +21,18 @@ import lombok.experimental.Accessors;
 public class AccessModel extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 授权key
+     */
     private String accessKey;
-
+    /**
+     * 授权secret
+     */
     private String accessSecret;
+    /**
+     * 备注
+     */
+    private String accessRemarks;
 
     /**
      * 是否可以上传 0：不可以  1：可以

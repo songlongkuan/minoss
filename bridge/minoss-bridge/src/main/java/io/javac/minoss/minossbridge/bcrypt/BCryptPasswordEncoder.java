@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
  * (exponentially) to hash the passwords. The default value is 10.
  *
  * @author Dave Syer
- *
  */
 public class BCryptPasswordEncoder implements PasswordEncoder {
     private Pattern BCRYPT_PATTERN = Pattern
@@ -38,8 +37,7 @@ public class BCryptPasswordEncoder implements PasswordEncoder {
 
     /**
      * @param strength the log rounds to use, between 4 and 31
-     * @param random the secure random instance to use
-     *
+     * @param random   the secure random instance to use
      */
     public BCryptPasswordEncoder(int strength, SecureRandom random) {
         if (strength != -1 && (strength < BCrypt.MIN_LOG_ROUNDS || strength > BCrypt.MAX_LOG_ROUNDS)) {
@@ -54,12 +52,10 @@ public class BCryptPasswordEncoder implements PasswordEncoder {
         if (strength > 0) {
             if (random != null) {
                 salt = BCrypt.gensalt(strength, random);
-            }
-            else {
+            } else {
                 salt = BCrypt.gensalt(strength);
             }
-        }
-        else {
+        } else {
             salt = BCrypt.gensalt();
         }
         return BCrypt.hashpw(rawPassword.toString(), salt);

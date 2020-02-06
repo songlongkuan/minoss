@@ -3,7 +3,7 @@ package io.javac.minoss.minosscommon.model.param;
 import lombok.Data;
 
 /**
- * 更新Bucket 参数
+ * update bucket param model
  *
  * @author pencilso
  * @date 2020/1/27 5:54 下午

@@ -18,4 +18,9 @@ public class SpringBootContext {
     public static void setContext(ConfigurableApplicationContext context) {
         SpringBootContext.context = context;
     }
+
+
+    public static <T> T getBean(Class<T> tClass) {
+        return context.getBean(tClass);
+    }
 }

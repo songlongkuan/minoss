@@ -1,12 +1,16 @@
 package io.javac.minoss.minosscommon.vertx;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.javac.minoss.minosscommon.config.MinOssProperties;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
 import io.javac.minoss.minosscommon.toolkit.Assert;
 import io.javac.minoss.minosscommon.toolkit.JsonUtils;
+import io.javac.minoss.minosscommon.toolkit.SpringBootContext;
 import io.vertx.core.http.Cookie;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +28,18 @@ public class VertxRequest {
 
     private VertxRequest(RoutingContext routingContext) {
         this.routingContext = routingContext;
+        MinOssProperties minOssProperties = SpringBootContext.getBean(MinOssProperties.class);
+        if (!minOssProperties.isDevlog()) return;
+
+        // out logs
+        HttpServerRequest request = routingContext.request();
+        String uri = request.uri();
+        HttpMethod method = request.method();
+
+        JsonObject bodyAsJson = routingContext.getBodyAsJson();
+        log.info("request uri: [{}] method: [{}] body as json: [{}]", uri, method, bodyAsJson);
+
+
     }
 
     public static VertxRequest build(RoutingContext routingContext) {
