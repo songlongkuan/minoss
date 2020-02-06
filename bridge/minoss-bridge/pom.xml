@@ -11,7 +11,7 @@
     <groupId>io.javac.minoss</groupId>
     <artifactId>minoss-bridge</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>minoss-cache-impl</name>
+    <name>minoss-cache-bridge</name>
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
