@@ -39,9 +39,7 @@ public class VertxUserServiceImpl implements VertxUserService {
 
     @Override
     public void userLogin(@NotNull VertxRequest vertxRequest, @NotEmpty String loginName, @NotEmpty String loginPassword) {
-        Optional<UserModel> optionalUserModel = userService.getByLoginName(loginName);
-        optionalUserModel.orElseThrow(() -> new MinOssMessageException("该用户不存在，请与管理员联系！"));
-        UserModel userModel = optionalUserModel.get();
+        UserModel userModel = userService.getByLoginName(loginName).orElseThrow(() -> new MinOssMessageException("该用户不存在，请与管理换联系！"));
         //check login password
         boolean matches = bCryptPasswordEncoder.matches(loginPassword, userModel.getLoginPassword());
         if (!matches) {
@@ -51,7 +49,7 @@ public class VertxUserServiceImpl implements VertxUserService {
         String jwtSalt = IdGeneratorCore.generatorUUID();
         //generator new accesstoken
         String accesstoken = jwtPlugin.generateToken(userModel.getMid(), jwtSalt).orElseThrow(() -> new MinOssMessageException("生成token令牌出错，请尝试稍后重试！"));
-        //更新用户token 和 hash salt
+        //update user accesstoken and  salt
         userService.updateModelByMid(
                 new UserModel().setJwtSalt(jwtSalt).setJwtToken(accesstoken).setVersion(userModel.getVersion()),
                 userModel.getMid());
