@@ -1,7 +1,7 @@
 package io.javac.minoss.minoss.minossappservice.impl;
 
 import io.javac.minoss.minoss.minossappservice.VertxUserService;
-import io.javac.minoss.minosscommon.bcrypt.BCryptPasswordEncoder;
+import io.javac.minoss.minosscommon.bcrypt.PasswordEncoder;
 import io.javac.minoss.minosscommon.cache.StringCacheStore;
 import io.javac.minoss.minosscommon.constant.CacheConst;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
@@ -30,7 +30,7 @@ public class VertxUserServiceImpl implements VertxUserService {
     @Autowired
     private UserService userService;
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtPlugin jwtPlugin;
     @Autowired
@@ -40,8 +40,7 @@ public class VertxUserServiceImpl implements VertxUserService {
     public void userLogin(@NotNull VertxRequest vertxRequest, @NotEmpty String loginName, @NotEmpty String loginPassword) {
         UserModel userModel = userService.getByLoginName(loginName).orElseThrow(() -> new MinOssMessageException("该用户不存在，请与管理换联系！"));
         //check login password
-        boolean matches = bCryptPasswordEncoder.matches(loginPassword, userModel.getLoginPassword());
-        if (!matches) {
+        if (!passwordEncoder.matches(loginPassword, userModel.getLoginPassword())) {
             throw new MinOssMessageException("账户或者密码错误，请尝试稍后重试！");
         }
         //generator new salt
