@@ -1,4 +1,4 @@
-package io.javac.minoss.minossbridge;
+package io.javac.minoss.minossbridge.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javac.minoss.minosscommon.cache.CacheWrapper;

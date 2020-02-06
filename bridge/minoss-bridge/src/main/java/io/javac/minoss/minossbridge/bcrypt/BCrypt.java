@@ -1,4 +1,4 @@
-package io.javac.minoss.minosscommon.bcrypt;
+package io.javac.minoss.minossbridge.bcrypt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;

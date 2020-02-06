@@ -1,5 +1,6 @@
-package io.javac.minoss.minosscommon.bcrypt;
+package io.javac.minoss.minossbridge.bcrypt;
 
+import io.javac.minoss.minosscommon.bcrypt.PasswordEncoder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

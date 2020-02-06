@@ -1,6 +1,6 @@
 package io.javac.minoss.minossstart;
 
-import io.javac.minoss.minossbridge.LevelCacheStore;
+import io.javac.minoss.minossbridge.cache.LevelCacheStore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,8 @@
 package io.javac.minoss.minossstart.configuration;
 
-import io.javac.minoss.minossbridge.LevelCacheStore;
-import io.javac.minoss.minosscommon.bcrypt.BCryptPasswordEncoder;
+import io.javac.minoss.minossbridge.bcrypt.BCryptPasswordEncoder;
+import io.javac.minoss.minossbridge.cache.LevelCacheStore;
+import io.javac.minoss.minosscommon.bcrypt.PasswordEncoder;
 import io.javac.minoss.minosscommon.cache.StringCacheStore;
 import io.javac.minoss.minosscommon.config.MinOssProperties;
 import io.javac.minoss.minosscommon.handler.IntercepTokenChecktHandler;
@@ -58,7 +59,7 @@ public class BeanConfiguration {
      * @return
      */
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public PasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
