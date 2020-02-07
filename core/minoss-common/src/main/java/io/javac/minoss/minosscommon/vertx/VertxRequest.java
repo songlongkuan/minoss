@@ -28,18 +28,6 @@ public class VertxRequest {
 
     private VertxRequest(RoutingContext routingContext) {
         this.routingContext = routingContext;
-        MinOssProperties minOssProperties = SpringBootContext.getBean(MinOssProperties.class);
-        if (!minOssProperties.isDevlog()) return;
-
-        // out logs
-        HttpServerRequest request = routingContext.request();
-        String uri = request.uri();
-        HttpMethod method = request.method();
-
-        JsonObject bodyAsJson = routingContext.getBodyAsJson();
-        log.info("request uri: [{}] method: [{}] body as json: [{}]", uri, method, bodyAsJson);
-
-
     }
 
     public static VertxRequest build(RoutingContext routingContext) {

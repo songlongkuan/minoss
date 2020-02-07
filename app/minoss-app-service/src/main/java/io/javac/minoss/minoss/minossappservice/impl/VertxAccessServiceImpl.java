@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minoss.minossappservice.VertxAccessService;
 import io.javac.minoss.minosscommon.bcrypt.PasswordEncoder;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
+import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;
 import io.javac.minoss.minosscommon.model.vo.AccessVO;
 import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
 import io.javac.minoss.minossdao.model.AccessModel;
@@ -16,7 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * controller access service
@@ -45,19 +49,14 @@ public class VertxAccessServiceImpl implements VertxAccessService {
         //init list
         responePage.setRecords(new ArrayList<>(queryPage.getRecords().size()));
         queryPage.getRecords().forEach(it -> {
-            log.info("source bean: [{}]", it);
-
-            AccessVO accessVO = dto2vo(it);
-            responePage.getRecords().add(accessVO);
-
-            log.info("target bean: [{}]", accessVO);
+            responePage.getRecords().add(dto2vo(it));
         });
         //respone
         return responePage;
     }
 
     @Override
-    public AccessVO dto2vo(AccessModel accessModel) {
+    public @NotNull AccessVO dto2vo(@NotNull AccessModel accessModel) {
         AccessVO accessVO = new AccessVO();
         BeanUtils.copyProperties(accessModel, accessVO);
         return accessVO;
@@ -78,4 +77,35 @@ public class VertxAccessServiceImpl implements VertxAccessService {
         //save db
         return accessService.save(accessModel);
     }
+
+    @Override
+    public Optional<AccessVO> getAccessVOModel(@NotNull Long accessMid) {
+        AccessVO accessVO = null;
+        //query db
+        Optional<AccessModel> accessModel = getAccessModel(accessMid);
+        if (accessModel.isPresent()) {
+            accessVO = new AccessVO();
+            BeanUtils.copyProperties(accessModel.get(), accessVO);
+        }
+        return Optional.ofNullable(accessVO);
+    }
+
+    @Override
+    public Optional<AccessModel> getAccessModel(@NotNull Long accessMid) {
+        return Optional.ofNullable(accessService.getByMid(accessMid));
+    }
+
+    @Override
+    public boolean update(@NotNull Integer version, @Valid ParamUpdateAccessBO paramUpdateAccessBO) {
+        AccessModel accessModel = new AccessModel();
+        BeanUtils.copyProperties(paramUpdateAccessBO, accessModel);
+        accessModel.setVersion(version);
+
+        boolean updateAccess = accessService.updateModelByMid(accessModel, paramUpdateAccessBO.getAccessMid());
+
+        log.debug("update access state : [{}]  version: [{}] paramUpdateAccessBO : [{}]", updateAccess, version, paramUpdateAccessBO);
+
+        return updateAccess;
+    }
+
 }

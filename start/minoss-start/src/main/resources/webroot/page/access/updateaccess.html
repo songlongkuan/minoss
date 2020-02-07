@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>更新access</title>
+    <link rel="stylesheet" href="../../lib/layui/css/layui.css" media="all">
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-item" style="margin-top: 30px">
+        <label class="layui-form-label">权限 下载：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="ifBucketGet" value="true" title="允许" checked="">
+            <input type="radio" name="ifBucketGet" value="false" title="拒绝">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限 上传：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="ifBucketPut" value="true" title="允许" checked="">
+            <input type="radio" name="ifBucketPut" value="false" title="拒绝">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限 编辑：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="ifBucketEdit" value="true" title="允许" checked="">
+            <input type="radio" name="ifBucketEdit" value="false" title="拒绝">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限 删除：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="ifBucketDel" value="true" title="允许" checked="">
+            <input type="radio" name="ifBucketDel" value="false" title="拒绝">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block">
+            <input type="text" name="accessRemarks" id="accessRemarks" required lay-verify="required" placeholder=""
+                   autocomplete="off"
+                   class="layui-input" style="width: 200px">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo" type="button">立即提交</button>
+        </div>
+    </div>
+
+    <input type="text" name="accessMid" id="accessMid" value="" style="display:none;"/>
+</form>
+
+<script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="../../lib/layui/layui.all.js"></script>
+<script src="../../lib/httputils.js"></script>
+<script src="../../lib/common.js"></script>
+<script>
+
+    var accessMid = getQueryString("accessMid");
+    $("#accessMid").val(accessMid)
+
+
+    layui.use('form', function () {
+        var form = layui.form;
+
+        if (accessMid !== '') {
+            queryAccessDetail()
+        }
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            var json = JSON.stringify(data.field);
+            if (accessMid === '') {
+                addAccess(json)
+            } else {
+                editAccess(json)
+            }
+            return false;
+        });
+    });
+
+
+    function queryAccessDetail() {
+        request("/api/admin/access/queryaccessdetail", "GET", {accessMid: accessMid}, function (result) {
+            var data = result.data;
+            $("#accessRemarks").val(data.accessRemarks)
+
+
+            clickRadio("ifBucketPut", data.ifBucketPut.toString())
+            clickRadio("ifBucketDel", data.ifBucketDel.toString())
+            clickRadio("ifBucketGet", data.ifBucketGet.toString())
+            clickRadio("ifBucketEdit", data.ifBucketEdit.toString())
+        })
+    }
+
+    function editAccess(json) {
+        requestJson("/api/admin/access/updateaccess", json, function (result) {
+            layer.msg(result.message)
+            closeLayerWindow()
+        })
+    }
+
+    function addAccess(json) {
+        requestJson("/api/admin/access/insertaccess", json, function (result) {
+            layer.msg(result.message)
+            closeLayerWindow()
+        })
+    }
+
+    function clickRadio(radioName, value) {
+        var radio = document.getElementsByName(radioName);
+        var radioLength = radio.length;
+        for (var i = 0; i < radioLength; i++) {
+            if (value === radio[i].value) {
+                $(radio[i]).next().click();
+            }
+        }
+    }
+
+</script>
+</body>
+</html>

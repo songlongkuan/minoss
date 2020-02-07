@@ -98,7 +98,7 @@ public class VertxBucketServiceImpl implements VertxBucketService {
         BucketModel bucketModel = new BucketModel();
         BeanUtils.copyProperties(paramUpdateBucketBO, bucketModel);
         bucketModel.setVersion(version);
-        boolean updateBucket = bucketService.updateModelByMid(bucketModel, paramUpdateBucketBO.getMid());
+        boolean updateBucket = bucketService.updateModelByMid(bucketModel, paramUpdateBucketBO.getBucketMid());
         log.debug("update bucket state : [{}]  version: [{}] paramUpdateBucketBO : [{}]", updateBucket, version, paramUpdateBucketBO);
         return updateBucket;
     }

@@ -9,6 +9,7 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -33,7 +34,8 @@ public class VertxRespone {
         HttpServerResponse httpServerResponse = routingContext.response();
         httpServerResponse.putHeader("Content-Type", "text/json;charset=utf-8");
         try {
-            httpServerResponse.end(JsonUtils.objectToJson(responeWrapper));
+            @NotNull String objectToJson = JsonUtils.objectToJson(responeWrapper);
+            httpServerResponse.end(objectToJson);
         } catch (JsonProcessingException e) {
             log.error("serialize object to json fail wrapper: [{}]", responeWrapper);
             e.printStackTrace();

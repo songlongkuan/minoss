@@ -17,6 +17,8 @@ import io.vertx.ext.web.Route;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.LoggerFormat;
+import io.vertx.ext.web.handler.LoggerHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +68,9 @@ public class VerticleMain extends AbstractVerticle {
     public void start() throws Exception {
         super.start();
         Router router = Router.router(vertx);
-        router.route("/api/*").handler(new CorsHandler());
+        if (minOssProperties.isDevlog()) {
+            router.route("/api/*").handler(LoggerHandler.create(LoggerFormat.SHORT));
+        }
         //register controller
         for (String packagePath : controllerBasePackage) {
             registerController(router, packagePath);

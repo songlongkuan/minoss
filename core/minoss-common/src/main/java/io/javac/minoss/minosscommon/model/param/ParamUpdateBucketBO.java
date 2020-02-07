@@ -13,5 +13,5 @@ public class ParamUpdateBucketBO extends ParamInsertBucketBO {
     /**
      * Bucket 业务唯一ID
      */
-    private Long mid;
+    private Long bucketMid;
 }

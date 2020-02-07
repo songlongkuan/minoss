@@ -19,12 +19,20 @@
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">存储空间</a>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">存储空间</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:switchPage('page/bucket/bucketlist.html');">空间管理</a></dd>
+                        <dd><a href="javascript:switchPage('page/bucket/bucketlist.html');">授权管理</a></dd>
                     </dl>
                 </li>
+
+                <li class="layui-nav-item">
+                    <a href="javascript:;">授权模块</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:switchPage('page/access/accesslist.html');">授权管理</a></dd>
+                    </dl>
+                </li>
+
                 <li class="layui-nav-item">
                     <a href="javascript:;">解决方案</a>
                     <dl class="layui-nav-child">
@@ -71,7 +79,6 @@
         $.ajax({
             type: "GET",
             url: pagePath,
-            timeout: 5000,
             xhrFields: {
                 withCredentials: true
             },

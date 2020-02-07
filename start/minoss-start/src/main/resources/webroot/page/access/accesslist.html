@@ -1,0 +1,165 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>access 授权 列表</title>
+    <link rel="stylesheet" href="../../lib/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>授权列表</legend>
+</fieldset>
+
+<table class="layui-hide" id="accesstable" lay-filter="accesstable"></table>
+
+<script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="../../lib/httputils.js"></script>
+<script src="../../lib/layui/layui.all.js"></script>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addBucket" type="button" onclick="addAccess()">新增Access
+        </button>
+        <button class="layui-btn layui-btn-sm" lay-event="addBucket" type="button" onclick="queryAccessList()">刷新列表
+        </button>
+    </div>
+</script>
+<script type="text/html" id="ifBucketPut">
+    {{#  if(d.ifBucketPut == true ){ }}
+    允许
+    {{#  } else if(d.ifBucketPut == false ) { }}
+    拒绝
+    {{#  } else { }}
+    未知
+    {{#  } }}
+</script>
+<script type="text/html" id="ifBucketGet">
+    {{#  if(d.ifBucketGet == true ){ }}
+    允许
+    {{#  } else if(d.ifBucketGet == false ) { }}
+    拒绝
+    {{#  } else { }}
+    未知
+    {{#  } }}
+</script>
+<script type="text/html" id="ifBucketEdit">
+    {{#  if(d.ifBucketEdit == true ){ }}
+    允许
+    {{#  } else if(d.ifBucketEdit == false ) { }}
+    拒绝
+    {{#  } else { }}
+    未知
+    {{#  } }}
+</script>
+<script type="text/html" id="ifBucketDel">
+    {{#  if(d.ifBucketDel == true ){ }}
+    允许
+    {{#  } else if(d.ifBucketDel == false ) { }}
+    拒绝
+    {{#  } else { }}
+    未知
+    {{#  } }}
+</script>
+<script type="text/html" id="editBar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="edit">编辑</button>
+        <button class="layui-btn layui-btn-sm" lay-event="manger">管理</button>
+    </div>
+</script>
+<script>
+
+
+    layui.use(['form', 'layedit', 'laydate', 'table'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+        table = layui.table;
+
+        $.ajaxSetup({
+            xhrFields: {
+                withCredentials: true
+            },
+        });
+        queryAccessList();
+    });
+
+    function queryAccessList() {
+        table.render({ //其它参数在此省略
+            elem: '#accesstable',
+            loading: true,
+            url: baseApiPath + '/api/admin/access/queryaccesslist',
+            toolbar: '#toolbarDemo',
+            method: 'get', //如果无需自定义HTTP类型，可不加该参数
+            request: {pageName: 'pageNum', limitName: 'pageSize'}, //如果无需自定义请求参数，可不加该参数
+            response: {
+                statusName: 'code',
+                statusCode: 0,
+                msgName: 'message',
+                countName: 'totalData',
+                dataName: 'data'
+            }, //如果无需自定义数据响应名称，可不加该参数
+            cols: [[
+                {field: 'mid', width: 200, title: 'Access Id', align: 'center'}
+                , {field: 'accessKey', width: 200, title: 'Access key', align: 'center'}
+                , {field: 'accessSecret', width: 200, title: 'Access secret', align: 'center'}
+                , {field: 'ifBucketGet', width: 100, title: '权限-下载', align: 'center', templet: '#ifBucketGet'}
+                , {field: 'ifBucketPut', width: 100, title: '权限-上传', align: 'center', templet: '#ifBucketPut'}
+                , {field: 'ifBucketEdit', width: 100, title: '权限-编辑', align: 'center', templet: '#ifBucketEdit'}
+                , {field: 'ifBucketDel', width: 100, title: '权限-删除', align: 'center', templet: '#ifBucketDel'}
+                , {field: 'accessRemarks', width: 200, title: '备注', align: 'center'}
+                , {field: 'createDate', width: 180, title: '创建时间', align: 'center'}
+                , {fixed: 'right', title: '操作', toolbar: '#editBar', width: 120}
+            ]],
+            page: true,
+            limit: 20
+        });
+
+        //监听行工具事件
+        table.on('tool(accesstable)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case "edit":
+                    editAccess(data.mid)
+                    break
+            }
+        });
+
+
+    }
+
+
+    function editAccess(accessMid) {
+        layer.open({
+            title: '修改access',
+            area: ['364px', '400px'],
+            type: 2,
+            offset: 'auto',
+            id: 'addAdConsole',
+            content: ["page/access/updateaccess.html?accessMid=" + accessMid, 'no'],
+            btnAlign: 'c',
+            shade: 0.5,
+            yes: function () {
+                layer.closeAll();
+            }
+        });
+    }
+
+    function addAccess() {
+        layer.open({
+            title: '添加Access',
+            area: ['364px', '400px'],
+            type: 2,
+            offset: 'auto',
+            id: 'addAdConsole',
+            content: ["page/access/updateaccess.html", 'no'],
+            btnAlign: 'c',
+            shade: 0.5,
+            yes: function () {
+                layer.closeAll();
+            }
+        });
+    }
+</script>
+</body>
+</html>

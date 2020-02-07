@@ -6,8 +6,11 @@ import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.base.VertxControllerHandler;
 import io.javac.minoss.minosscommon.enums.RequestMethod;
+import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
+import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;
 import io.javac.minoss.minosscommon.model.vo.AccessVO;
+import io.javac.minoss.minossdao.model.AccessModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,9 +50,38 @@ public class VertxAccessController {
     public VertxControllerHandler insertAccess() {
         return vertxRequest -> {
             ParamInsertAccessBO paramInsertAccessBO = vertxRequest.getBodyJsonToBean(ParamInsertAccessBO.class);
-            log.info("paramInsertAccessBO : [{}]", paramInsertAccessBO);
             boolean success = vertxAccessService.insert(paramInsertAccessBO);
             vertxRequest.buildVertxRespone().responeState(success);
+        };
+    }
+
+    /**
+     * update db access
+     *
+     * @return
+     */
+    @RequestBody
+    @RequestMapping(value = "updateaccess", method = RequestMethod.POST)
+    public VertxControllerHandler updateAccess() {
+        return vertxRequest -> {
+            ParamUpdateAccessBO paramUpdateAccessBO = vertxRequest.getBodyJsonToBean(ParamUpdateAccessBO.class);
+            AccessModel accessModel = vertxAccessService.getAccessModel(paramUpdateAccessBO.getAccessMid()).orElseThrow(() -> new MinOssMessageException("该 Access 不存在"));
+            boolean success = vertxAccessService.update(accessModel.getVersion(), paramUpdateAccessBO);
+            vertxRequest.buildVertxRespone().responeState(success);
+        };
+    }
+
+    /**
+     * query access detail
+     *
+     * @return
+     */
+    @RequestMapping("queryaccessdetail")
+    public VertxControllerHandler queryAccessDetail() {
+        return vertxRequest -> {
+            String accessMid = vertxRequest.getParamNotBlank("accessMid");
+            AccessVO accessVO = vertxAccessService.getAccessVOModel(Long.valueOf(accessMid)).orElseThrow(() -> new MinOssMessageException("该 Access 不存在"));
+            vertxRequest.buildVertxRespone().responeSuccess(accessVO);
         };
     }
 }

@@ -27,7 +27,10 @@ public class AccessVO {
      * 授权secret
      */
     private String accessSecret;
-
+    /**
+     * 备注
+     */
+    private String accessRemarks;
     /**
      * 是否可以上传 0：不可以  1：可以
      */

@@ -2,10 +2,13 @@ package io.javac.minoss.minoss.minossappservice;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
+import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;
 import io.javac.minoss.minosscommon.model.vo.AccessVO;
 import io.javac.minoss.minossdao.model.AccessModel;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 /**
  * @author pencilso
@@ -28,7 +31,8 @@ public interface VertxAccessService {
      * @param accessModel
      * @return
      */
-    AccessVO dto2vo(AccessModel accessModel);
+    @NotNull
+    AccessVO dto2vo(@NotNull AccessModel accessModel);
 
     /**
      * insert new access for ParamInsertAccessBO
@@ -38,4 +42,30 @@ public interface VertxAccessService {
      * @return
      */
     boolean insert(@Valid ParamInsertAccessBO paramInsertAccessBO);
+
+    /**
+     * query access model to view model
+     *
+     * @param accessMid
+     * @return
+     */
+    Optional<AccessVO> getAccessVOModel(@NotNull Long accessMid);
+
+    /**
+     * query access model
+     *
+     * @param accessMid
+     * @return
+     */
+    Optional<AccessModel> getAccessModel(@NotNull Long accessMid);
+
+    /**
+     * update access db
+     * valid param
+     *
+     * @param version             lock version
+     * @param paramUpdateAccessBO param model
+     * @return
+     */
+    boolean update(@NotNull Integer version, @Valid ParamUpdateAccessBO paramUpdateAccessBO);
 }

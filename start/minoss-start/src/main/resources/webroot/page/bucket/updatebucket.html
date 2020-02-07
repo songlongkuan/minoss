@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <input type="text" name="mid" id="mid" value="" style="display:none;"/>
+    <input type="text" name="bucketMid" id="bucketMid" value="" style="display:none;"/>
 </form>
 
 <script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
@@ -47,7 +47,7 @@
 <script>
 
     var bucketmid = getQueryString("bucketmid");
-    $("#mid").val(bucketmid)
+    $("#bucketMid").val(bucketmid)
 
 
     layui.use('form', function () {
@@ -72,7 +72,7 @@
 
 
     function queryBucketDetail() {
-        request("/api/admin/bucket/querybucketdetail", "GET", {mid: bucketmid}, function (result) {
+        request("/api/admin/bucket/querybucketdetail", "GET", {bucetMid: bucketmid}, function (result) {
             var data = result.data;
             $("#bucketName").val(data.bucketName)
             $("#bucketStorePath").val(data.bucketStorePath)
