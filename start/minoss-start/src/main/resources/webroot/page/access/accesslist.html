@@ -62,8 +62,9 @@
 </script>
 <script type="text/html" id="editBar">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="edit">编辑</button>
-        <button class="layui-btn layui-btn-sm" lay-event="manger">管理</button>
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs" lay-event="right">授权</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </div>
 </script>
 <script>
@@ -109,7 +110,7 @@
                 , {field: 'ifBucketDel', width: 100, title: '权限-删除', align: 'center', templet: '#ifBucketDel'}
                 , {field: 'accessRemarks', width: 200, title: '备注', align: 'center'}
                 , {field: 'createDate', width: 180, title: '创建时间', align: 'center'}
-                , {fixed: 'right', title: '操作', toolbar: '#editBar', width: 120}
+                , {fixed: 'right', title: '操作', toolbar: '#editBar', width: 170}
             ]],
             page: true,
             limit: 20
@@ -121,6 +122,30 @@
             switch (obj.event) {
                 case "edit":
                     editAccess(data.mid)
+                    break
+                case "del":
+                    layer.confirm('确认删除该Access吗 ？', function (index) {
+                        request("/api/admin/access/deleteaccess", "POST", {accessMid: data.mid}, function (result) {
+                            layer.msg(result.message)
+                            obj.del();
+                            layer.close(index);
+                        })
+                    });
+                    break
+                case "right":
+                    layer.open({
+                        title: '授权bucket',
+                        area: ['520px', '500px'],
+                        type: 2,
+                        offset: 'auto',
+                        id: 'accessBucket',
+                        content: ["page/access/accessbucket.html?accessMid="+data.mid, 'no'],
+                        btnAlign: 'c',
+                        shade: 0.5,
+                        yes: function () {
+                            layer.closeAll();
+                        }
+                    });
                     break
             }
         });
@@ -135,7 +160,7 @@
             area: ['364px', '400px'],
             type: 2,
             offset: 'auto',
-            id: 'addAdConsole',
+            id: 'editAccess',
             content: ["page/access/updateaccess.html?accessMid=" + accessMid, 'no'],
             btnAlign: 'c',
             shade: 0.5,
@@ -151,7 +176,7 @@
             area: ['364px', '400px'],
             type: 2,
             offset: 'auto',
-            id: 'addAdConsole',
+            id: 'addAccess',
             content: ["page/access/updateaccess.html", 'no'],
             btnAlign: 'c',
             shade: 0.5,
@@ -160,6 +185,8 @@
             }
         });
     }
+
+
 </script>
 </body>
 </html>

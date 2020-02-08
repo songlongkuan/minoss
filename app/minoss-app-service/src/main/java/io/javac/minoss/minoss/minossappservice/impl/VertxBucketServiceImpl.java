@@ -21,10 +21,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -107,6 +104,11 @@ public class VertxBucketServiceImpl implements VertxBucketService {
     @Override
     public BucketModel getBucketModel(@NotNull Long bucketMid) {
         return bucketService.getByMid(bucketMid);
+    }
+
+    @Override
+    public List<BucketModel> getBucketModel(@NotNull Collection<Long> bucketMid) {
+        return bucketService.getByMids(bucketMid);
     }
 
     @Override

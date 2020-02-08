@@ -5,7 +5,7 @@ import io.javac.minoss.minossdao.base.BaseIService;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author pencilso
@@ -13,4 +13,12 @@ import io.javac.minoss.minossdao.base.BaseIService;
  */
 public interface AccessBucketService extends BaseIService<AccessBucketModel> {
 
+    /**
+     * query accessbucket model from accessmid and bucket mid
+     *
+     * @param accessMid access mid
+     * @param bucketMid bucket mid
+     * @return
+     */
+    AccessBucketModel getByAccessMidAndBucketMid(Long accessMid, Long bucketMid);
 }

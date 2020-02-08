@@ -2,12 +2,17 @@ package io.javac.minoss.minoss.minossappservice.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minoss.minossappservice.VertxAccessService;
+import io.javac.minoss.minoss.minossappservice.VertxBucketService;
 import io.javac.minoss.minosscommon.bcrypt.PasswordEncoder;
+import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;
 import io.javac.minoss.minosscommon.model.vo.AccessVO;
+import io.javac.minoss.minosscommon.model.vo.BucketVO;
 import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
+import io.javac.minoss.minossdao.model.AccessBucketModel;
 import io.javac.minoss.minossdao.model.AccessModel;
+import io.javac.minoss.minossdao.model.BucketModel;
 import io.javac.minoss.minossdao.service.AccessBucketService;
 import io.javac.minoss.minossdao.service.AccessService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +25,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * controller access service
@@ -39,6 +47,8 @@ public class VertxAccessServiceImpl implements VertxAccessService {
     private AccessService accessService;
     @Autowired
     private AccessBucketService accessBucketService;
+    @Autowired
+    private VertxBucketService vertxBucketService;
 
 
     @Override
@@ -108,4 +118,36 @@ public class VertxAccessServiceImpl implements VertxAccessService {
         return updateAccess;
     }
 
+
+    @Override
+    public boolean deleteAccess(@NotNull Long accessMid) {
+        return accessService.removeByMid(accessMid);
+    }
+
+
+    @Override
+    public List<BucketModel> getAccessBucketList(@NotBlank Long accessMid) {
+        AccessModel accessModel = accessService.getByMid(accessMid);
+        //check accessModel is null
+        if (accessModel == null) return new ArrayList<BucketModel>();
+
+        //query access and sort
+        List<AccessBucketModel> list = accessBucketService.lambdaQuery()
+                .eq(AccessBucketModel::getAccessMid, accessMid)
+                .orderByAsc(AccessBucketModel::getOrderSort)
+                .list();
+
+        //query bucket
+        Set<Long> bucketMid = list.stream().map(AccessBucketModel::getBucketMid).collect(Collectors.toSet());
+        return vertxBucketService.getBucketModel(bucketMid);
+    }
+
+    @Override
+    public boolean insertAccessBucket(@NotNull Long accessMid, @NotNull Long bucketMid) {
+        AccessModel accessModel = getAccessModel(accessMid).orElseThrow(() -> new MinOssMessageException("该access 不存在 ！"));
+        AccessBucketModel accessBucketModel = accessBucketService.getByAccessMidAndBucketMid(accessMid, bucketMid);
+//        if (accessBucketModel!=null) throw new
+        
+        return false;
+    }
 }

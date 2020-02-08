@@ -1,9 +1,9 @@
 package io.javac.minoss.minosscommon.model.respone;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.javac.minoss.minosscommon.constant.ResponeWrapperConst;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -31,6 +31,7 @@ public class ResponeWrapper<V> {
      * @param <L> list
      */
     @Data
+    @EqualsAndHashCode(callSuper = true)
     @Accessors(chain = true)
     public static class ResponePageWrapper<L> extends ResponeWrapper<L> {
         /**

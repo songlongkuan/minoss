@@ -9,6 +9,9 @@ import io.javac.minoss.minossdao.model.BucketModel;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * controller bucket service
@@ -43,12 +46,20 @@ public interface VertxBucketService {
     boolean update(Integer version, @Valid ParamUpdateBucketBO paramUpdateBucketBO);
 
     /**
-     * 获取bucket model
+     * query bucket model
      *
      * @param bucketMid bucket唯一ID
      * @return
      */
     BucketModel getBucketModel(@NotNull Long bucketMid);
+
+    /**
+     * query bucket model list
+     *
+     * @param bucketMid
+     * @return
+     */
+    List<BucketModel> getBucketModel(@NotNull Collection<Long> bucketMid);
 
 
     /**
@@ -66,4 +77,6 @@ public interface VertxBucketService {
      * @return
      */
     BucketVO getBucketVOModel(@NotNull Long bucketMid);
+
+
 }

@@ -1,6 +1,7 @@
 package io.javac.minoss.minosscommon.model.param;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
  * @date 2020/2/6 8:48 下午
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class ParamUpdateAccessBO extends ParamInsertAccessBO {
 

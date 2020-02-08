@@ -17,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccessBucketServiceImpl extends ServiceImpl<AccessBucketMapper, AccessBucketModel> implements AccessBucketService {
 
+    @Override
+    public AccessBucketModel getByAccessMidAndBucketMid(Long accessMid, Long bucketMid) {
+        return lambdaQuery().eq(AccessBucketModel::getAccessMid, accessMid).eq(AccessBucketModel::getBucketMid, bucketMid).one();
+    }
 }

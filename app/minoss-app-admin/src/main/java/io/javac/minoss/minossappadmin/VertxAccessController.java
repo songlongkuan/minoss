@@ -10,10 +10,14 @@ import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;
 import io.javac.minoss.minosscommon.model.vo.AccessVO;
+import io.javac.minoss.minosscommon.model.vo.BucketVO;
 import io.javac.minoss.minossdao.model.AccessModel;
+import io.javac.minoss.minossdao.model.BucketModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author pencilso
@@ -82,6 +86,46 @@ public class VertxAccessController {
             String accessMid = vertxRequest.getParamNotBlank("accessMid");
             AccessVO accessVO = vertxAccessService.getAccessVOModel(Long.valueOf(accessMid)).orElseThrow(() -> new MinOssMessageException("该 Access 不存在"));
             vertxRequest.buildVertxRespone().responeSuccess(accessVO);
+        };
+    }
+
+    /**
+     * delete access
+     *
+     * @return
+     */
+    @RequestBody
+    @RequestMapping(value = "deleteaccess", method = RequestMethod.POST)
+    public VertxControllerHandler deleteAccess() {
+        return vertxRequest -> {
+            Long accessMid = Long.valueOf(vertxRequest.getParamNotBlank("accessMid"));
+            AccessModel accessModel = vertxAccessService.getAccessModel(accessMid).orElseThrow(() -> new MinOssMessageException("该Access 不存在，无需删除！"));
+            boolean success = vertxAccessService.deleteAccess(accessMid);
+            vertxRequest.buildVertxRespone().responeState(success);
+        };
+    }
+
+    /**
+     * query acess bucket
+     *
+     * @return
+     */
+    @RequestMapping("queryaccessbucketlist")
+    public VertxControllerHandler queryAccessBucketList() {
+        return vertxRequest -> {
+            Long accessMid = Long.valueOf(vertxRequest.getParamNotBlank("accessMid"));
+            List<BucketModel> accessBucketList = vertxAccessService.getAccessBucketList(accessMid);
+            vertxRequest.buildVertxRespone().responeSuccess(accessBucketList);
+        };
+    }
+
+    @RequestBody
+    @RequestMapping("queryaccessbucketlist")
+    public VertxControllerHandler insertAccessBucket() {
+        return vertxRequest -> {
+            Long accessMid = Long.valueOf(vertxRequest.getParamNotBlank("accessMid"));
+            Long bucketMid = Long.valueOf(vertxRequest.getParamNotBlank("bucketMid"));
+            boolean success = vertxAccessService.insertAccessBucket(accessMid, bucketMid);
         };
     }
 }

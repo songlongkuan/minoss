@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>access 授权bucket</title>
+    <link rel="stylesheet" href="../../lib/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<form class="layui-form" action="">
+    <div class="layui-form-item" style="margin-top: 30px ; margin-left: 20px">
+        <div id="test7" class="demo-transfer"></div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo" type="button">立即提交</button>
+        </div>
+    </div>
+
+    <input type="text" name="accessMid" id="accessMid" value="" style="display:none;"/>
+</form>
+
+<script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="../../lib/layui/layui.all.js"></script>
+<script src="../../lib/httputils.js"></script>
+<script src="../../lib/common.js"></script>
+<script>
+
+    var accessMid = getQueryString("accessMid");
+
+    layui.use(['transfer', 'layer', 'util'], function () {
+        var $ = layui.$
+            , transfer = layui.transfer
+            , layer = layui.layer
+            , util = layui.util;
+
+        //模拟数据
+        var data1 = [
+            {"value": "1", "title": "李白"}
+            , {"value": "2", "title": "杜甫"}
+            , {"value": "3", "title": "苏轼"}
+            , {"value": "4", "title": "李清照"}
+            , {"value": "5", "title": "鲁迅", "disabled": true}
+            , {"value": "6", "title": "巴金"}
+            , {"value": "7", "title": "冰心"}
+            , {"value": "8", "title": "矛盾"}
+            , {"value": "9", "title": "贤心"}
+        ]
+
+
+        //实例调用
+        transfer.render({
+            elem: '#test7'
+            , data: data1
+            , id: 'key123' //定义唯一索引
+        })
+        //批量办法定事件
+        util.event('lay-demoTransferActive', {
+            getData: function (othis) {
+                var getData = transfer.getData('key123'); //获取右侧数据
+                layer.alert(JSON.stringify(getData));
+            }
+            , reload: function () {
+                //实例重载
+                transfer.reload('key123', {
+                    title: ['文人', '喜欢的文人']
+                    , value: ['2', '5', '9']
+                    , showSearch: true
+                })
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

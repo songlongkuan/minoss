@@ -1,12 +1,16 @@
 package io.javac.minoss.minosscommon.exception;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * @author pencilso
  * @date 2020/1/23 8:55 下午
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 public class MinOssMessageException extends RuntimeException {
 
     private Exception exception;
