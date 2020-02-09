@@ -15,7 +15,7 @@
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="formDemo" type="button">立即提交</button>
+            <button class="layui-btn" type="button" minoss-button="submit">立即提交</button>
         </div>
     </div>
 
@@ -36,43 +36,42 @@
             , layer = layui.layer
             , util = layui.util;
 
-        //模拟数据
-        var data1 = [
-            {"value": "1", "title": "李白"}
-            , {"value": "2", "title": "杜甫"}
-            , {"value": "3", "title": "苏轼"}
-            , {"value": "4", "title": "李清照"}
-            , {"value": "5", "title": "鲁迅", "disabled": true}
-            , {"value": "6", "title": "巴金"}
-            , {"value": "7", "title": "冰心"}
-            , {"value": "8", "title": "矛盾"}
-            , {"value": "9", "title": "贤心"}
-        ]
 
+        request("/api/admin/access/queryaccessbucketlist", "GET", {accessMid: accessMid}, function (result) {
+            var data = result.data;
 
-        //实例调用
-        transfer.render({
-            elem: '#test7'
-            , data: data1
-            , id: 'key123' //定义唯一索引
+            var valueArray = [];
+
+            data.alreadyaccess.map(item => {
+                valueArray.push(item.value)
+            });
+            //实例调用
+            transfer.render({
+                elem: '#test7'
+                , data: data.allaccess
+                , id: 'selectaccessbucket' //定义唯一索引
+                , value: valueArray
+            })
         })
+
+
         //批量办法定事件
-        util.event('lay-demoTransferActive', {
-            getData: function (othis) {
-                var getData = transfer.getData('key123'); //获取右侧数据
-                layer.alert(JSON.stringify(getData));
-            }
-            , reload: function () {
-                //实例重载
-                transfer.reload('key123', {
-                    title: ['文人', '喜欢的文人']
-                    , value: ['2', '5', '9']
-                    , showSearch: true
+        util.event('minoss-button', {
+            submit: function (othis) {
+                var data = transfer.getData('selectaccessbucket'); //获取右侧数据
+                var bucketMids = [];
+                data.map(item => {
+                    bucketMids.push(item.value)
+                })
+                var param = {accessMid: accessMid, bucketMid: bucketMids}
+                requestJson("/api/admin/access/updateaccessbucket", JSON.stringify(param), function (result) {
+                    layer.msg(result.message)
+                    closeLayerWindow()
                 })
             }
         });
-
     });
+
 </script>
 </body>
 </html>
