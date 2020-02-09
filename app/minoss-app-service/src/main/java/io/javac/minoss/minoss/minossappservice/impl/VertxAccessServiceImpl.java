@@ -2,32 +2,29 @@ package io.javac.minoss.minoss.minossappservice.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minoss.minossappservice.VertxAccessService;
-import io.javac.minoss.minoss.minossappservice.VertxBucketService;
 import io.javac.minoss.minosscommon.bcrypt.PasswordEncoder;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;
+import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBucketBO;
 import io.javac.minoss.minosscommon.model.vo.AccessVO;
-import io.javac.minoss.minosscommon.model.vo.BucketVO;
 import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
 import io.javac.minoss.minossdao.model.AccessBucketModel;
 import io.javac.minoss.minossdao.model.AccessModel;
-import io.javac.minoss.minossdao.model.BucketModel;
 import io.javac.minoss.minossdao.service.AccessBucketService;
 import io.javac.minoss.minossdao.service.AccessService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -47,8 +44,6 @@ public class VertxAccessServiceImpl implements VertxAccessService {
     private AccessService accessService;
     @Autowired
     private AccessBucketService accessBucketService;
-    @Autowired
-    private VertxBucketService vertxBucketService;
 
 
     @Override
@@ -126,28 +121,50 @@ public class VertxAccessServiceImpl implements VertxAccessService {
 
 
     @Override
-    public List<BucketModel> getAccessBucketList(@NotBlank Long accessMid) {
+    public List<AccessBucketModel> getAccessBucketList(@NotNull Long accessMid) {
         AccessModel accessModel = accessService.getByMid(accessMid);
         //check accessModel is null
-        if (accessModel == null) return new ArrayList<BucketModel>();
+        if (accessModel == null) return new ArrayList<>();
 
         //query access and sort
-        List<AccessBucketModel> list = accessBucketService.lambdaQuery()
+        return accessBucketService.lambdaQuery()
                 .eq(AccessBucketModel::getAccessMid, accessMid)
                 .orderByAsc(AccessBucketModel::getOrderSort)
                 .list();
-
-        //query bucket
-        Set<Long> bucketMid = list.stream().map(AccessBucketModel::getBucketMid).collect(Collectors.toSet());
-        return vertxBucketService.getBucketModel(bucketMid);
     }
 
+    @Transactional
     @Override
-    public boolean insertAccessBucket(@NotNull Long accessMid, @NotNull Long bucketMid) {
-        AccessModel accessModel = getAccessModel(accessMid).orElseThrow(() -> new MinOssMessageException("该access 不存在 ！"));
-        AccessBucketModel accessBucketModel = accessBucketService.getByAccessMidAndBucketMid(accessMid, bucketMid);
-//        if (accessBucketModel!=null) throw new
-        
-        return false;
+    public boolean updateAccessBucket(@Valid ParamUpdateAccessBucketBO paramUpdateAccessBucketBO) {
+        @NotNull Long accessMid = paramUpdateAccessBucketBO.getAccessMid();
+        AccessModel accessModel = getAccessModel(accessMid).orElseThrow(() -> new MinOssMessageException("要更新的Access 是不存在的！"));
+        //query access bucket list
+        List<AccessBucketModel> accessBucketModelList = accessBucketService.getByAccessMid(accessMid);
+        //insert new access bucket model
+
+        if (!paramUpdateAccessBucketBO.getBucketMid().isEmpty()) {
+            //insert access bucket model
+            List<AccessBucketModel> insertAccessBucketModes = new ArrayList<>();
+            int orderSort = 0;
+            for (Long bucketMid : paramUpdateAccessBucketBO.getBucketMid()) {
+                insertAccessBucketModes.add(
+                        new AccessBucketModel()
+                                .setAccessMid(accessMid)
+                                .setBucketMid(bucketMid)
+                                .setOrderSort(orderSort++)
+                                .setMid(IdGeneratorCore.generatorId())
+                );
+            }
+            if (!accessBucketService.saveBatch(insertAccessBucketModes))
+                throw new MinOssMessageException("保存 Access 授权出错！");
+        }
+
+        //remove old access bucket
+        if (!accessBucketModelList.isEmpty()) {
+            boolean removeByMids = accessBucketService.removeByMids(accessBucketModelList.stream().map(AccessBucketModel::getMid).collect(Collectors.toList()));
+            if (!removeByMids) throw new MinOssMessageException("移除旧的Access 授权出错！");
+        }
+        return true;
     }
+
 }

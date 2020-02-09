@@ -2,6 +2,7 @@ package io.javac.minoss.minossappadmin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minoss.minossappservice.VertxAccessService;
+import io.javac.minoss.minoss.minossappservice.VertxBucketService;
 import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minosscommon.base.VertxControllerHandler;
@@ -9,15 +10,21 @@ import io.javac.minoss.minosscommon.enums.RequestMethod;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;
+import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBucketBO;
 import io.javac.minoss.minosscommon.model.vo.AccessVO;
-import io.javac.minoss.minosscommon.model.vo.BucketVO;
+import io.javac.minoss.minosscommon.toolkit.Kv;
+import io.javac.minoss.minossdao.model.AccessBucketModel;
 import io.javac.minoss.minossdao.model.AccessModel;
 import io.javac.minoss.minossdao.model.BucketModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author pencilso
@@ -30,6 +37,8 @@ public class VertxAccessController {
 
     @Autowired
     private VertxAccessService vertxAccessService;
+    @Autowired
+    private VertxBucketService vertxBucketService;
 
     /**
      * query access list for page
@@ -114,18 +123,34 @@ public class VertxAccessController {
     public VertxControllerHandler queryAccessBucketList() {
         return vertxRequest -> {
             Long accessMid = Long.valueOf(vertxRequest.getParamNotBlank("accessMid"));
-            List<BucketModel> accessBucketList = vertxAccessService.getAccessBucketList(accessMid);
-            vertxRequest.buildVertxRespone().responeSuccess(accessBucketList);
+            List<AccessBucketModel> alreadyAccessBucketList = vertxAccessService.getAccessBucketList(accessMid);
+            //query all bucket model
+            Map<Long, BucketModel> bucketModelMap = vertxBucketService.getBucketModelAll().stream().collect(Collectors.toMap(BucketModel::getMid, model -> model));
+
+            List<Kv<String, Object>> responeAlreadyAccess = new LinkedList<>();
+            List<Kv<String, Object>> responeAllAccess = new LinkedList<>();
+
+            // assembly all no access bucket data
+            bucketModelMap.values().forEach(bucketModel -> {
+                responeAllAccess.add(Kv.stringObjectKv().set("value", bucketModel.getMid()).set("title", bucketModel.getBucketName()));
+            });
+
+            // assembly already access bucket data
+            alreadyAccessBucketList.forEach(accessBucketModel -> {
+                BucketModel bucketModel = bucketModelMap.get(accessBucketModel.getBucketMid());
+                responeAlreadyAccess.add(Kv.stringObjectKv().set("value", bucketModel.getMid()).set("title", bucketModel.getBucketName()));
+            });
+            vertxRequest.buildVertxRespone().responeSuccess(Kv.stringObjectKv().set("allaccess", responeAllAccess).set("alreadyaccess", responeAlreadyAccess));
         };
     }
 
     @RequestBody
-    @RequestMapping("queryaccessbucketlist")
-    public VertxControllerHandler insertAccessBucket() {
+    @RequestMapping(value = "updateaccessbucket", method = RequestMethod.POST)
+    public VertxControllerHandler updateAccessBucket() {
         return vertxRequest -> {
-            Long accessMid = Long.valueOf(vertxRequest.getParamNotBlank("accessMid"));
-            Long bucketMid = Long.valueOf(vertxRequest.getParamNotBlank("bucketMid"));
-            boolean success = vertxAccessService.insertAccessBucket(accessMid, bucketMid);
+            ParamUpdateAccessBucketBO paramUpdateAccessBucketBO = vertxRequest.getBodyJsonToBean(ParamUpdateAccessBucketBO.class);
+            boolean success = vertxAccessService.updateAccessBucket(paramUpdateAccessBucketBO);
+            vertxRequest.buildVertxRespone().responeState(success);
         };
     }
 }

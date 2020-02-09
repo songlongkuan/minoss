@@ -14,8 +14,6 @@ import io.javac.minoss.minossdao.model.BucketModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-
 /**
  * bucket controller
  *

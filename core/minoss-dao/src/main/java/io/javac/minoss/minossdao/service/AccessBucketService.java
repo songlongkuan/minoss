@@ -3,6 +3,9 @@ package io.javac.minoss.minossdao.service;
 import io.javac.minoss.minossdao.model.AccessBucketModel;
 import io.javac.minoss.minossdao.base.BaseIService;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
 /**
  * <p>
  * 服务类
@@ -20,5 +23,13 @@ public interface AccessBucketService extends BaseIService<AccessBucketModel> {
      * @param bucketMid bucket mid
      * @return
      */
-    AccessBucketModel getByAccessMidAndBucketMid(Long accessMid, Long bucketMid);
+    AccessBucketModel getByAccessMidAndBucketMid(@NotNull Long accessMid, @NotNull Long bucketMid);
+
+    /**
+     * query access bucket model list by accessmid
+     *
+     * @param accessMid accessmid
+     * @return
+     */
+    List<AccessBucketModel> getByAccessMid(@NotNull Long accessMid);
 }

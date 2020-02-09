@@ -66,5 +66,16 @@ public interface BaseIService<M extends BaseModel> extends IService<M> {
         return update(model, queryWrapper);
     }
 
+    /**
+     * remove batch by business mid
+     *
+     * @param mids
+     * @return
+     */
+    default boolean removeByMids(@NotNull Collection<Long> mids) {
+        QueryWrapper<M> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("mid", mids);
+        return remove(queryWrapper);
+    }
 
 }

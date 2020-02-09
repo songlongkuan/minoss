@@ -3,8 +3,10 @@ package io.javac.minoss.minoss.minossappservice;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;
+import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBucketBO;
 import io.javac.minoss.minosscommon.model.vo.AccessVO;
 import io.javac.minoss.minosscommon.model.vo.BucketVO;
+import io.javac.minoss.minossdao.model.AccessBucketModel;
 import io.javac.minoss.minossdao.model.AccessModel;
 import io.javac.minoss.minossdao.model.BucketModel;
 
@@ -87,14 +89,13 @@ public interface VertxAccessService {
      * @param accessMid
      * @return
      */
-    List<BucketModel> getAccessBucketList(@NotBlank Long accessMid);
+    List<AccessBucketModel> getAccessBucketList(@NotNull Long accessMid);
 
     /**
-     * insert new bucket access
+     * update access bucket
      *
-     * @param accessMid access mid
-     * @param bucketMid bucket mid
+     * @param paramUpdateAccessBucketBO update param model
      * @return
      */
-    boolean insertAccessBucket(@NotNull Long accessMid, @NotNull Long bucketMid);
+    boolean updateAccessBucket(@Valid ParamUpdateAccessBucketBO paramUpdateAccessBucketBO);
 }

@@ -78,5 +78,11 @@ public interface VertxBucketService {
      */
     BucketVO getBucketVOModel(@NotNull Long bucketMid);
 
+    /**
+     * query all bucket model
+     *
+     * @return
+     */
+    List<BucketModel> getBucketModelAll();
 
 }

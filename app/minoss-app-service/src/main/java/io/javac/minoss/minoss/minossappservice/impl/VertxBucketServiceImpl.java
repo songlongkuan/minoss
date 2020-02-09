@@ -128,4 +128,9 @@ public class VertxBucketServiceImpl implements VertxBucketService {
         BeanUtils.copyProperties(bucketCollect, bucketVO);
         return bucketVO;
     }
+
+    @Override
+    public List<BucketModel> getBucketModelAll() {
+        return bucketService.list();
+    }
 }
