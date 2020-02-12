@@ -25,4 +25,10 @@ public class MinOssProperties {
      * request respone ....  logs out
      */
     private boolean devlog = false;
+
+    /**
+     * upload file temp
+     */
+    private String workTempUpload = workDir + "work/upload/";
+
 }

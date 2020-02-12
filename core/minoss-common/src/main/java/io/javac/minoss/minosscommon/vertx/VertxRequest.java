@@ -34,6 +34,9 @@ public class VertxRequest {
         return new VertxRequest(routingContext);
     }
 
+    public RoutingContext getRoutingContext() {
+        return routingContext;
+    }
 
     /**
      * 获取token解析后的用户id
@@ -168,4 +171,6 @@ public class VertxRequest {
     public String getParamNotBlank(String key) {
         return getParam(key).orElseThrow(() -> new MinOssMessageException(key + " can not be null"));
     }
+
+
 }

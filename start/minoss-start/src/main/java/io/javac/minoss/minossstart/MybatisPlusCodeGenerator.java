@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Create By SongLongKuan on 2019/5/16
+ * Create By pencilso on 2019/5/16
  */
 public class MybatisPlusCodeGenerator {
     /**
