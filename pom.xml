@@ -10,7 +10,7 @@
     </parent>
     <groupId>io.javac</groupId>
     <artifactId>minoss</artifactId>
-    <version>0.0.1-SNAPSHOT</version>c
+    <version>0.0.1-SNAPSHOT</version>
     <name>minoss</name>
     <description>Demo project for Spring Boot</description>
     <packaging>pom</packaging>
