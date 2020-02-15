@@ -37,6 +37,7 @@
     <modules>
         <module>core/minoss-common</module>
         <module>core/minoss-dao</module>
+        <module>core/minoss-service</module>
 
         <module>app/minoss-app-client</module>
         <module>app/minoss-app-admin</module>
@@ -57,6 +58,11 @@
             <dependency>
                 <groupId>io.javac.minoss</groupId>
                 <artifactId>minoss-dao</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.javac.minoss</groupId>
+                <artifactId>minoss-service</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>

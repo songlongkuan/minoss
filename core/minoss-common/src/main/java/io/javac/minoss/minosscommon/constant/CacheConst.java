@@ -7,5 +7,5 @@ package io.javac.minoss.minosscommon.constant;
  * @date 2020/1/25 1:20 下午
  */
 public interface CacheConst {
-    String CACHE_USER_JWT_SALT = "cache_user_jwt_salt:";
+    String CACHE_OBJECT_JWT_SALT = "cache_object_jwt_salt:";
 }

@@ -3,11 +3,14 @@ package io.javac.minoss.minoss.minossappservice.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minoss.minossappservice.VertxAccessService;
 import io.javac.minoss.minosscommon.bcrypt.PasswordEncoder;
+import io.javac.minoss.minosscommon.cache.StringCacheStore;
+import io.javac.minoss.minosscommon.constant.CacheConst;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBucketBO;
 import io.javac.minoss.minosscommon.model.vo.AccessVO;
+import io.javac.minoss.minosscommon.plugin.JwtPlugin;
 import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
 import io.javac.minoss.minossdao.model.AccessBucketModel;
 import io.javac.minoss.minossdao.model.AccessModel;
@@ -44,6 +47,10 @@ public class VertxAccessServiceImpl implements VertxAccessService {
     private AccessService accessService;
     @Autowired
     private AccessBucketService accessBucketService;
+    @Autowired
+    private JwtPlugin jwtPlugin;
+    @Autowired
+    private StringCacheStore stringCacheStore;
 
 
     @Override
@@ -165,6 +172,18 @@ public class VertxAccessServiceImpl implements VertxAccessService {
             if (!removeByMids) throw new MinOssMessageException("移除旧的Access 授权出错！");
         }
         return true;
+    }
+
+    @Override
+    public String accessLogin(@NotNull String accessKey, @NotNull String accessSecret) {
+        AccessModel accessModel = accessService.getByAccessKey(accessKey).orElseThrow(() -> new MinOssMessageException("invalid access token or secret！"));
+        if (!accessSecret.equals(accessModel.getAccessSecret())) {
+            throw new MinOssMessageException("invalid access token or secret！");
+        }
+        //generate access token
+        String accesstoken = jwtPlugin.generateToken(accessModel.getMid(), accessSecret).orElseThrow(() -> new MinOssMessageException("generate access token fail"));
+        stringCacheStore.put(CacheConst.CACHE_OBJECT_JWT_SALT + accessModel.getMid(), accessSecret);
+        return accesstoken;
     }
 
 }

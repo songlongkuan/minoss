@@ -1,6 +1,6 @@
-package io.javac.minoss.minosscommon.model.intercept;
+package io.javac.minoss.minossservice.intercept;
 
-import io.javac.minoss.minosscommon.base.BaseInterceptHandler;
+import io.javac.minoss.minossservice.base.BaseInterceptHandler;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

@@ -4,6 +4,8 @@ import io.javac.minoss.minosscommon.model.bo.FileGeneratorBO;
 import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
+
 /**
  * @author pencilso
  * @date 2020/2/9 9:35 下午
@@ -45,5 +47,14 @@ public class FileUtils {
         fileGeneratorBO.setFileName(fileName);
         fileGeneratorBO.setPath(dir + fileName);
         return fileGeneratorBO;
+    }
+
+    public static void mkdirs(String filePath) {
+        mkdirs(new File(filePath));
+    }
+
+    public static void mkdirs(File file) {
+        Assert.notNull(file, "mkdirs file can not be null!");
+        file.mkdirs();
     }
 }

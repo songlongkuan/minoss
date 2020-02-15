@@ -1,4 +1,4 @@
-package io.javac.minoss.minosscommon.vertx;
+package io.javac.minoss.minossservice.vertx;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.core.JsonProcessingException;

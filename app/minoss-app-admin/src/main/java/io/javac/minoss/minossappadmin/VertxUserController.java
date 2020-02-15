@@ -4,7 +4,7 @@ import io.javac.minoss.minoss.minossappservice.VertxUserService;
 import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestInterceptClear;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
-import io.javac.minoss.minosscommon.base.VertxControllerHandler;
+import io.javac.minoss.minossservice.base.VertxControllerHandler;
 import io.javac.minoss.minosscommon.enums.RequestMethod;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
@@ -55,7 +55,7 @@ public class VertxUserController {
     public VertxControllerHandler userDetails() {
         return vertxRequest -> {
             JwtAuthModel authEntitu = vertxRequest.getAuthEntitu();
-            UserModel userModel = vertxUserService.getByuMid(authEntitu.getUMid()).orElseThrow(() -> new MinOssMessageException("该用户不存在!"));
+            UserModel userModel = vertxUserService.getByuMid(authEntitu.getId()).orElseThrow(() -> new MinOssMessageException("该用户不存在!"));
             vertxRequest.buildVertxRespone().responeSuccess(userModel);
         };
     }

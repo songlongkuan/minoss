@@ -5,13 +5,10 @@ import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBucketBO;
 import io.javac.minoss.minosscommon.model.vo.AccessVO;
-import io.javac.minoss.minosscommon.model.vo.BucketVO;
 import io.javac.minoss.minossdao.model.AccessBucketModel;
 import io.javac.minoss.minossdao.model.AccessModel;
-import io.javac.minoss.minossdao.model.BucketModel;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
@@ -98,4 +95,13 @@ public interface VertxAccessService {
      * @return
      */
     boolean updateAccessBucket(@Valid ParamUpdateAccessBucketBO paramUpdateAccessBucketBO);
+
+    /**
+     * access key secret login
+     *
+     * @param accessKey    accessKey
+     * @param accessSecret accessSecret
+     * @return
+     */
+    String accessLogin(@NotNull String accessKey, @NotNull String accessSecret);
 }

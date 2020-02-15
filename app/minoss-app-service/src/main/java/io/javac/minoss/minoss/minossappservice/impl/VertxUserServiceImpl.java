@@ -8,7 +8,7 @@ import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.plugin.JwtPlugin;
 import io.javac.minoss.minosscommon.toolkit.Kv;
 import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
-import io.javac.minoss.minosscommon.vertx.VertxRequest;
+import io.javac.minoss.minossservice.vertx.VertxRequest;
 import io.javac.minoss.minossdao.model.UserModel;
 import io.javac.minoss.minossdao.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +54,7 @@ public class VertxUserServiceImpl implements VertxUserService {
                 userModel.getMid());
         vertxRequest.buildVertxRespone().responeSuccess(Kv.stringStringKv().set("accesstoken", accesstoken));
         //put new jwt salt
-        stringCacheStore.put(CacheConst.CACHE_USER_JWT_SALT + userModel.getMid(), jwtSalt);
+        stringCacheStore.put(CacheConst.CACHE_OBJECT_JWT_SALT + userModel.getMid(), jwtSalt);
         log.debug("user login success by  [{}]  new accesstoken [{}]  jwtSalt [{}]", loginName, accesstoken, jwtSalt);
     }
 

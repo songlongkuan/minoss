@@ -1,7 +1,7 @@
 package io.javac.minoss.minossappclient;
 
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
-import io.javac.minoss.minosscommon.base.VertxControllerHandler;
+import io.javac.minoss.minossservice.base.VertxControllerHandler;
 import io.javac.minoss.minosscommon.config.MinOssProperties;
 import io.javac.minoss.minosscommon.enums.RequestMethod;
 import io.javac.minoss.minosscommon.model.bo.FileGeneratorBO;
@@ -38,6 +38,7 @@ public class VertxFileController {
                 //get file ext name
                 String fileExt = FileUtils.getFileExt(upload.filename());
                 FileGeneratorBO fileGeneratorBO = FileUtils.generatorFilePath(minOssProperties.getWorkTempUpload(), fileExt);
+                log.info("upload file -> [{}]",fileGeneratorBO);
                 //save file
                 upload.streamToFileSystem(fileGeneratorBO.getPath());
             });

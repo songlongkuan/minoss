@@ -29,6 +29,9 @@ public class MinOssProperties {
     /**
      * upload file temp
      */
-    private String workTempUpload = workDir + "work/upload/";
+    private String workTempUpload = workDir + "upload/";
+
+
+
 
 }

@@ -30,39 +30,39 @@ public class JwtPlugin {
     /**
      * key -> user id
      */
-    private final String CLAIN_KEY_UID = "u_id";
+    private final String CLAIN_KEY_ID = "id";
     /**
      * key -> user salt
      */
-    private final String CLATIN_KEY_USALT = "u_salt";
+    private final String CLATIN_KEY_SALT = "salt";
     /**
      * key -> login time
      */
-    private final String CLAIN_KEY_TIME = "l_time";
+    private final String CLAIN_KEY_TIME = "time";
 
 
     /**
-     * 生成token
+     * generate new token
      *
-     * @param uMid 用户唯一ID
-     * @param salt 用户哈希盐
+     * @param id   data id
+     * @param salt salt
      * @return
      */
-    public Optional<String> generateToken(@NotNull Long uMid, @NotEmpty String salt) {
+    public Optional<String> generateToken(@NotNull Long id, @NotEmpty String salt) {
         String token = null;
         try {
             Map<String, Object> body = new HashMap<>();
-            body.put(CLAIN_KEY_UID, uMid);
-            body.put(CLATIN_KEY_USALT, salt);
+            body.put(CLAIN_KEY_ID, id);
+            body.put(CLATIN_KEY_SALT, salt);
             body.put(CLAIN_KEY_TIME, System.currentTimeMillis());
             token = Jwts.builder()
                     .setClaims(body)
                     .signWith(SignatureAlgorithm.HS512, secret)
                     .compact();
-            log.debug("jwt generateToken success uMid: [{}] salt: [{}]", uMid, salt);
+            log.debug("jwt generateToken success id: [{}] salt: [{}]", id, salt);
         } catch (Exception ex) {
             ex.printStackTrace();
-            log.error("jwt generateToken fail uMid: [{}]  salt: [{}]", uMid, salt, ex);
+            log.error("jwt generateToken fail id: [{}]  salt: [{}]", id, salt, ex);
         }
         return Optional.ofNullable(token);
 
@@ -79,11 +79,11 @@ public class JwtPlugin {
         try {
             Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
             jwtAuthModel = new JwtAuthModel()
-                    .setUMid((Long) claims.get(CLAIN_KEY_UID))
-                    .setSalt((String) claims.get(CLATIN_KEY_USALT))
+                    .setId((Long) claims.get(CLAIN_KEY_ID))
+                    .setSalt((String) claims.get(CLATIN_KEY_SALT))
                     .setLoginTime((Long) claims.get(CLAIN_KEY_TIME));
         } catch (Exception ex) {
-            log.warn("jwt getOauthEntity fail token: [{}]", token,ex);
+            log.warn("jwt getOauthEntity fail token: [{}]", token, ex);
         }
         return Optional.ofNullable(jwtAuthModel);
     }

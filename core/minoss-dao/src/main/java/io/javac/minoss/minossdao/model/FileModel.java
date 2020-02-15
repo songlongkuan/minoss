@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author pencilso
@@ -56,6 +56,8 @@ public class FileModel extends BaseModel {
      * 文件夹id
      */
     private Long folderMid;
-
-
+    /**
+     * 授权key的唯一ID
+     */
+    private Long accessMid;
 }

@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class JwtAuthModel {
 
-    private Long uMid;
+    private Long id;
 
     private String salt;
 

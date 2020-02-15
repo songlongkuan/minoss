@@ -1,4 +1,4 @@
-package io.javac.minoss.minosscommon.handler;
+package io.javac.minoss.minossservice.handler;
 
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerResponse;

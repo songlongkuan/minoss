@@ -1,4 +1,4 @@
-package io.javac.minoss.minosscommon.vertx;
+package io.javac.minoss.minossservice.vertx;
 
 import io.javac.minoss.minosscommon.enums.RequestMethod;
 import io.vertx.ext.web.Route;

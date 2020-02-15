@@ -1,9 +1,8 @@
-package io.javac.minoss.minosscommon.base;
+package io.javac.minoss.minossservice.base;
 
-import io.javac.minoss.minosscommon.vertx.VertxRequest;
+import io.javac.minoss.minossservice.vertx.VertxRequest;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
