@@ -7,6 +7,7 @@ import io.javac.minoss.minossdao.service.BucketService;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
@@ -22,6 +23,6 @@ public class BucketServiceImpl extends ServiceImpl<BucketMapper, BucketModel> im
 
     @Override
     public BucketModel getByBucketName(@NotBlank String bucketName) {
-        return lambdaQuery().eq(BucketModel::getBucketName,bucketName).one();
+        return lambdaQuery().eq(BucketModel::getBucketName, bucketName).one();
     }
 }

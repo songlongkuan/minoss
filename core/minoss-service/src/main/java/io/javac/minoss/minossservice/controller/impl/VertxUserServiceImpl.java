@@ -1,6 +1,5 @@
-package io.javac.minoss.minoss.minossappservice.impl;
+package io.javac.minoss.minossservice.controller.impl;
 
-import io.javac.minoss.minoss.minossappservice.VertxUserService;
 import io.javac.minoss.minosscommon.bcrypt.PasswordEncoder;
 import io.javac.minoss.minosscommon.cache.StringCacheStore;
 import io.javac.minoss.minosscommon.constant.CacheConst;
@@ -8,9 +7,10 @@ import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.plugin.JwtPlugin;
 import io.javac.minoss.minosscommon.toolkit.Kv;
 import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
-import io.javac.minoss.minossservice.vertx.VertxRequest;
 import io.javac.minoss.minossdao.model.UserModel;
 import io.javac.minoss.minossdao.service.UserService;
+import io.javac.minoss.minossservice.controller.VertxUserService;
+import io.javac.minoss.minossservice.vertx.VertxRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

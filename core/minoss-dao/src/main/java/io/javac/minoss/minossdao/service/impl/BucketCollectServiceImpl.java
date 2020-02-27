@@ -29,4 +29,14 @@ public class BucketCollectServiceImpl extends ServiceImpl<BucketCollectMapper, B
     public BucketCollectModel getByBucketMid(Long bucketMid) {
         return lambdaQuery().eq(BucketCollectModel::getBucketMid, bucketMid).one();
     }
+
+    @Override
+    public boolean incrFileSize(Long bucketMid, int incr) {
+        return baseMapper.incrFileSize(bucketMid, incr);
+    }
+
+    @Override
+    public boolean incrUsedSize(Long bucketMid, long length) {
+        return baseMapper.incrUsedSize(bucketMid, length);
+    }
 }

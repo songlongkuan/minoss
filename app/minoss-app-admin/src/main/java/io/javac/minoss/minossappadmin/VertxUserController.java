@@ -1,14 +1,14 @@
 package io.javac.minoss.minossappadmin;
 
-import io.javac.minoss.minoss.minossappservice.VertxUserService;
 import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestInterceptClear;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
-import io.javac.minoss.minossservice.base.VertxControllerHandler;
 import io.javac.minoss.minosscommon.enums.request.RequestMethod;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
 import io.javac.minoss.minossdao.model.UserModel;
+import io.javac.minoss.minossservice.base.VertxControllerHandler;
+import io.javac.minoss.minossservice.controller.VertxUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

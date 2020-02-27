@@ -57,4 +57,8 @@ public class FileUtils {
         Assert.notNull(file, "mkdirs file can not be null!");
         file.mkdirs();
     }
+
+    public static String getFileMd5(String path) {
+        return IdGeneratorCore.generatorUUID();
+    }
 }

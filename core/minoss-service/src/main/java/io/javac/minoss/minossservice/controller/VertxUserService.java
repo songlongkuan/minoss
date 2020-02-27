@@ -1,7 +1,7 @@
-package io.javac.minoss.minoss.minossappservice;
+package io.javac.minoss.minossservice.controller;
 
-import io.javac.minoss.minossservice.vertx.VertxRequest;
 import io.javac.minoss.minossdao.model.UserModel;
+import io.javac.minoss.minossservice.vertx.VertxRequest;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

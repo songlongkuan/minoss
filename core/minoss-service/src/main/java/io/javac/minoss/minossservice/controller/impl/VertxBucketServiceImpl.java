@@ -1,7 +1,6 @@
-package io.javac.minoss.minoss.minossappservice.impl;
+package io.javac.minoss.minossservice.controller.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.javac.minoss.minoss.minossappservice.VertxBucketService;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertBucketBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateBucketBO;
@@ -12,6 +11,7 @@ import io.javac.minoss.minossdao.model.BucketCollectModel;
 import io.javac.minoss.minossdao.model.BucketModel;
 import io.javac.minoss.minossdao.service.BucketCollectService;
 import io.javac.minoss.minossdao.service.BucketService;
+import io.javac.minoss.minossservice.controller.VertxBucketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,5 +153,15 @@ public class VertxBucketServiceImpl implements VertxBucketService {
     @Override
     public BucketModel getBucketModelByCache(@NotBlank String bucketName) {
         return bucketService.getByBucketName(bucketName);
+    }
+
+    @Override
+    public boolean incrBucketCollectFileSize(Long bucketMid, int incr) {
+        return bucketCollectService.incrFileSize(bucketMid, incr);
+    }
+
+    @Override
+    public boolean incrBucketCollectUsedSize(Long bucketMid, long length) {
+        return bucketCollectService.incrUsedSize(bucketMid,length);
     }
 }

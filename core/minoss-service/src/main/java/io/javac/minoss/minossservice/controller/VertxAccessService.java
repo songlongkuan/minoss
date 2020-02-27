@@ -1,4 +1,4 @@
-package io.javac.minoss.minoss.minossappservice;
+package io.javac.minoss.minossservice.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;

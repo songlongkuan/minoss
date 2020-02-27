@@ -4,6 +4,8 @@ import io.javac.minoss.minossdao.model.BucketModel;
 import io.javac.minoss.minossdao.base.BaseIService;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 /**
  * <p>
@@ -21,4 +23,6 @@ public interface BucketService extends BaseIService<BucketModel> {
      * @return
      */
     BucketModel getByBucketName(@NotBlank String bucketName);
+
+
 }

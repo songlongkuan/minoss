@@ -18,6 +18,7 @@ public interface BucketCollectService extends BaseIService<BucketCollectModel> {
 
     /**
      * 批量获取汇总
+     *
      * @param bucketMids
      * @return
      */
@@ -25,9 +26,26 @@ public interface BucketCollectService extends BaseIService<BucketCollectModel> {
 
     /**
      * 获取单个汇总
-     * @param mid
+     *
+     * @param bucketMid
      * @return
      */
     BucketCollectModel getByBucketMid(Long bucketMid);
 
+    /**
+     * incr file size
+     *
+     * @param bucketMid bucket mid
+     * @param incr      incr nunmber
+     * @return
+     */
+    boolean incrFileSize(Long bucketMid, int incr);
+
+    /**
+     * incr used size
+     * @param bucketMid where bucket mid
+     * @param length    incr file length
+     * @return
+     */
+    boolean incrUsedSize(Long bucketMid, long length);
 }

@@ -1,14 +1,10 @@
 package io.javac.minoss.minossappclient;
 
-import io.javac.minoss.minoss.minossappservice.VertxFileService;
-import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
+import io.javac.minoss.minosscommon.enums.request.RequestMethod;
 import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
 import io.javac.minoss.minossservice.base.VertxControllerHandler;
-import io.javac.minoss.minosscommon.config.MinOssProperties;
-import io.javac.minoss.minosscommon.enums.request.RequestMethod;
-import io.javac.minoss.minosscommon.model.bo.FileGeneratorBO;
-import io.javac.minoss.minosscommon.toolkit.FileUtils;
+import io.javac.minoss.minossservice.controller.VertxFileService;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +26,7 @@ public class VertxFileController {
     public VertxControllerHandler uploadFile() {
         return vertxRequest -> {
             String bucketName = vertxRequest.getParamNotBlank("bucketName");
+            String objectName = vertxRequest.getParamNotBlank("objectName");
             JwtAuthModel authEntitu = vertxRequest.getAuthEntitu();
 
             RoutingContext routingContext = vertxRequest.getRoutingContext();
@@ -37,7 +34,7 @@ public class VertxFileController {
 
             request.setExpectMultipart(true);
             request.uploadHandler(upload -> {
-                vertxFileService.uploadFile(bucketName, authEntitu, upload);
+                vertxFileService.uploadFile(bucketName, objectName, authEntitu, upload);
             });
             vertxRequest.buildVertxRespone().responeState(true);
         };

@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.javac.minoss.minossdao.mapper.BucketCollectMapper">
 
+    <update id="incrFileSize">
+        update minoss_bucket_collect set
+        store_file_size = store_file_size + #{incr}
+        where bucket_mid = #{bucketMid}
+    </update>
+    <update id="incrUsedSize">
+        update minoss_bucket_collect set
+        store_used_size = store_used_size + #{incr}
+        where bucket_mid = #{bucketMid}
+    </update>
 </mapper>

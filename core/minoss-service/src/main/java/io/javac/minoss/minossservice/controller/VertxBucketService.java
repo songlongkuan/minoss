@@ -1,4 +1,4 @@
-package io.javac.minoss.minoss.minossappservice;
+package io.javac.minoss.minossservice.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.javac.minoss.minosscommon.model.param.ParamInsertBucketBO;
@@ -6,14 +6,12 @@ import io.javac.minoss.minosscommon.model.param.ParamUpdateBucketBO;
 import io.javac.minoss.minosscommon.model.vo.BucketVO;
 import io.javac.minoss.minossdao.model.BucketCollectModel;
 import io.javac.minoss.minossdao.model.BucketModel;
-import org.springframework.cache.annotation.Cacheable;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * controller bucket service
@@ -94,4 +92,21 @@ public interface VertxBucketService {
      * @return
      */
     BucketModel getBucketModelByCache(@NotBlank String bucketName);
+
+    /**
+     * incr bucket file size
+     *
+     * @param bucketMid where bucket mid
+     * @param incr      incr file size
+     * @return
+     */
+    boolean incrBucketCollectFileSize(Long bucketMid, int incr);
+
+    /**
+     * incr bucket used size
+     *
+     * @param bucketMid where bucket mid
+     * @param length    incr length
+     */
+    boolean incrBucketCollectUsedSize(Long bucketMid, long length);
 }
