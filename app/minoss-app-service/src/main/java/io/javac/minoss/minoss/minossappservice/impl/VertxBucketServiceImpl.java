@@ -15,12 +15,16 @@ import io.javac.minoss.minossdao.service.BucketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -87,6 +91,11 @@ public class VertxBucketServiceImpl implements VertxBucketService {
             log.warn("insert new bucket collect fail param: [{}]", paramInsertBucketBO);
             throw new MinOssMessageException("新增Bucket汇总数据出错，请尝试稍后重试！");
         }
+
+        if (!StringUtils.isEmpty(bucketModel.getBucketStorePath())) {
+            //mkdir bucket store path
+            new File(bucketModel.getBucketStorePath()).mkdirs();
+        }
         return true;
     }
 
@@ -97,6 +106,12 @@ public class VertxBucketServiceImpl implements VertxBucketService {
         bucketModel.setVersion(version);
         boolean updateBucket = bucketService.updateModelByMid(bucketModel, paramUpdateBucketBO.getBucketMid());
         log.debug("update bucket state : [{}]  version: [{}] paramUpdateBucketBO : [{}]", updateBucket, version, paramUpdateBucketBO);
+
+
+        if (!StringUtils.isEmpty(bucketModel.getBucketStorePath())) {
+            //mkdir bucket store path
+            new File(bucketModel.getBucketStorePath()).mkdirs();
+        }
         return updateBucket;
     }
 
@@ -132,5 +147,11 @@ public class VertxBucketServiceImpl implements VertxBucketService {
     @Override
     public List<BucketModel> getBucketModelAll() {
         return bucketService.list();
+    }
+
+    @Cacheable("bucket")
+    @Override
+    public BucketModel getBucketModelByCache(@NotBlank String bucketName) {
+        return bucketService.getByBucketName(bucketName);
     }
 }

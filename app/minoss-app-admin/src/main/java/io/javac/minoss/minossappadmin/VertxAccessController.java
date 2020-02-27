@@ -6,7 +6,7 @@ import io.javac.minoss.minoss.minossappservice.VertxBucketService;
 import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minossservice.base.VertxControllerHandler;
-import io.javac.minoss.minosscommon.enums.RequestMethod;
+import io.javac.minoss.minosscommon.enums.request.RequestMethod;
 import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.param.ParamInsertAccessBO;
 import io.javac.minoss.minosscommon.model.param.ParamUpdateAccessBO;

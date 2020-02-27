@@ -1,6 +1,6 @@
 package io.javac.minoss.minossservice.vertx;
 
-import io.javac.minoss.minosscommon.enums.RequestMethod;
+import io.javac.minoss.minosscommon.enums.request.RequestMethod;
 import io.vertx.ext.web.Route;
 import io.vertx.ext.web.Router;
 import org.springframework.core.io.Resource;

@@ -5,7 +5,7 @@ import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestInterceptClear;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
 import io.javac.minoss.minossservice.base.VertxControllerHandler;
-import io.javac.minoss.minosscommon.enums.RequestMethod;
+import io.javac.minoss.minosscommon.enums.request.RequestMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

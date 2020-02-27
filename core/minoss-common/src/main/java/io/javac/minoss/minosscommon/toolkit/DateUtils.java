@@ -13,6 +13,27 @@ import java.util.concurrent.TimeUnit;
  */
 @Validated
 public class DateUtils {
+    /**
+     * 毫秒常量
+     */
+    public interface MillisecondConst {
+        /**
+         * 秒
+         */
+        long SECOND = 1000;
+        /**
+         * 分钟
+         */
+        long MINUTE = SECOND * 60;
+        /**
+         * 小时
+         */
+        long HOUR = MINUTE * 60;
+        /**
+         * 天
+         */
+        long DAY = HOUR * 24;
+    }
 
     /**
      * get current time

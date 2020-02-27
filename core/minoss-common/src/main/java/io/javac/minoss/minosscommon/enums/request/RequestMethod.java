@@ -1,4 +1,4 @@
-package io.javac.minoss.minosscommon.enums;
+package io.javac.minoss.minosscommon.enums.request;
 
 /**
  * 请求方式  枚举

@@ -1,6 +1,6 @@
 package io.javac.minoss.minosscommon.annotation;
 
-import io.javac.minoss.minosscommon.enums.RequestMethod;
+import io.javac.minoss.minosscommon.enums.request.RequestMethod;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

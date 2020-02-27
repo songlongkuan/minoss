@@ -1,9 +1,12 @@
 package io.javac.minoss.minossappclient;
 
+import io.javac.minoss.minoss.minossappservice.VertxFileService;
+import io.javac.minoss.minosscommon.annotation.RequestBody;
 import io.javac.minoss.minosscommon.annotation.RequestMapping;
+import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
 import io.javac.minoss.minossservice.base.VertxControllerHandler;
 import io.javac.minoss.minosscommon.config.MinOssProperties;
-import io.javac.minoss.minosscommon.enums.RequestMethod;
+import io.javac.minoss.minosscommon.enums.request.RequestMethod;
 import io.javac.minoss.minosscommon.model.bo.FileGeneratorBO;
 import io.javac.minoss.minosscommon.toolkit.FileUtils;
 import io.vertx.core.http.HttpServerRequest;
@@ -21,26 +24,20 @@ import org.springframework.stereotype.Component;
 @RequestMapping("/api/client/file")
 public class VertxFileController {
     @Autowired
-    private MinOssProperties minOssProperties;
+    private VertxFileService vertxFileService;
 
     @RequestMapping(value = "uploadfile", method = RequestMethod.POST)
     public VertxControllerHandler uploadFile() {
         return vertxRequest -> {
-            String workDir = minOssProperties.getWorkDir();
-
-            System.out.println("workDir；" + workDir);
+            String bucketName = vertxRequest.getParamNotBlank("bucketName");
+            JwtAuthModel authEntitu = vertxRequest.getAuthEntitu();
 
             RoutingContext routingContext = vertxRequest.getRoutingContext();
             HttpServerRequest request = routingContext.request();
 
             request.setExpectMultipart(true);
             request.uploadHandler(upload -> {
-                //get file ext name
-                String fileExt = FileUtils.getFileExt(upload.filename());
-                FileGeneratorBO fileGeneratorBO = FileUtils.generatorFilePath(minOssProperties.getWorkTempUpload(), fileExt);
-                log.info("upload file -> [{}]",fileGeneratorBO);
-                //save file
-                upload.streamToFileSystem(fileGeneratorBO.getPath());
+                vertxFileService.uploadFile(bucketName, authEntitu, upload);
             });
             vertxRequest.buildVertxRespone().responeState(true);
         };
