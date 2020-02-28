@@ -28,6 +28,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -99,7 +100,7 @@ public class VerticleMain extends AbstractVerticle {
         try {
             Resource[] resources = VerticleUtils.scannerControllerClass(packagePath, resourceLoader);
             for (Resource resource : resources) {
-                String absolutePath = resource.getFile().getAbsolutePath().replace("/", ".");
+                String absolutePath = resource.getFile().getAbsolutePath().replace(File.separator, ".");
                 absolutePath = absolutePath.substring(absolutePath.indexOf(packagePath));
                 absolutePath = absolutePath.replace(".class", "");
                 if (StringUtils.isEmpty(absolutePath)) continue;

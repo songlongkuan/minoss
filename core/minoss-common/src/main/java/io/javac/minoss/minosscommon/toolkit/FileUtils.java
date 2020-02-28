@@ -58,7 +58,5 @@ public class FileUtils {
         file.mkdirs();
     }
 
-    public static String getFileMd5(String path) {
-        return IdGeneratorCore.generatorUUID();
-    }
+
 }

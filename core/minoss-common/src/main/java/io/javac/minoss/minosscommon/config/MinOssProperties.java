@@ -1,9 +1,12 @@
 package io.javac.minoss.minosscommon.config;
 
 import io.javac.minoss.minosscommon.constant.MinOssConst;
+import io.javac.minoss.minosscommon.enums.system.OSType;
+import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 
 /**
@@ -32,6 +35,21 @@ public class MinOssProperties {
     private String workTempUpload = workDir + "upload/";
 
 
+    private OSType osType;
+
+    @PostConstruct
+    public void init() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("linux")) {
+            osType = OSType.Linux;
+        }else if (os.contains("mac")){
+            osType = OSType.MacOS;
+        }else if (os.contains("windows")){
+            osType = OSType.Windows;
+        }else {
+            throw new MinOssMessageException("unknown os type");
+        }
+    }
 
 
 }

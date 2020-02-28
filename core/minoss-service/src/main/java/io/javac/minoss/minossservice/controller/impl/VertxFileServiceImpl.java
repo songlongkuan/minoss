@@ -1,8 +1,11 @@
 package io.javac.minoss.minossservice.controller.impl;
 
+import io.javac.minoss.minosscommon.config.MinOssProperties;
+import io.javac.minoss.minosscommon.exception.MinOssMessageException;
 import io.javac.minoss.minosscommon.model.bo.FileGeneratorBO;
 import io.javac.minoss.minosscommon.model.jwt.JwtAuthModel;
 import io.javac.minoss.minosscommon.toolkit.FileUtils;
+import io.javac.minoss.minosscommon.toolkit.ShellToolkit;
 import io.javac.minoss.minosscommon.toolkit.id.IdGeneratorCore;
 import io.javac.minoss.minossdao.model.BucketModel;
 import io.javac.minoss.minossdao.model.FileModel;
@@ -16,10 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.nio.charset.Charset;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author pencilso
@@ -34,6 +41,8 @@ public class VertxFileServiceImpl implements VertxFileService {
     private ApplicationContext applicationContext;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private MinOssProperties minOssProperties;
 
     @Override
     public void uploadFile(String bucketName, String objectName, JwtAuthModel authEntitu, HttpServerFileUpload upload) {
@@ -76,8 +85,7 @@ public class VertxFileServiceImpl implements VertxFileService {
         fileModel.setFilePath(objectName);
 
 
-        String fileMd5 = FileUtils.getFileMd5(fileGeneratorBO.getPath());
-
+        String fileMd5 = getFileMd5(fileGeneratorBO.getPath()).orElseThrow(() -> new MinOssMessageException("get file md5 error"));
 
         fileModel.setFileExt(fileGeneratorBO.getFileExt())
                 .setAccessMid(accessMid)
@@ -87,6 +95,55 @@ public class VertxFileServiceImpl implements VertxFileService {
                 .setMid(IdGeneratorCore.generatorId());
 
         return fileService.save(fileModel);
+    }
+
+    @Override
+    public Optional<String> getFileMd5(@NotBlank String filePath) {
+        File file = new File(filePath);
+        if (!file.exists()){
+            throw new MinOssMessageException("get file md5 fail , path no exists . ");
+        }
+
+        AtomicReference<String> cmdReturn = new AtomicReference<>();
+        switch (minOssProperties.getOsType()) {
+            case Linux: {
+                String shell = "md5sum " + filePath;
+                Optional<String> execCmd = ShellToolkit.execCmd(shell, null);
+                execCmd.ifPresent(respone -> {
+                    cmdReturn.set(respone.substring(0, 32));
+                });
+            }
+            break;
+            case MacOS: {
+                String shell = "md5 " + filePath;
+                Optional<String> execCmd = ShellToolkit.execCmd(shell, null);
+                execCmd.ifPresent(respone -> {
+                    String[] split = respone.split("=");
+                    if (split.length > 1) {
+                        cmdReturn.set(split[1].trim());
+                    }
+                });
+            }
+            break;
+            case Windows: {
+                String shell = "certutil -hashfile " + filePath + " MD5";
+                Optional<String> execCmd = ShellToolkit.execCmd(shell, null);
+                execCmd.ifPresent(respone -> {
+                    String[] split = respone.split("\n");
+                    if (split.length >= 3) {
+                        cmdReturn.set(split[1].trim());
+                    }
+                });
+            }
+            break;
+            default:
+                throw new MinOssMessageException("unknown os type");
+        }
+        if (StringUtils.isEmpty(cmdReturn.get())) {
+            return Optional.empty();
+        } else {
+            return Optional.ofNullable(cmdReturn.get());
+        }
     }
 
 
